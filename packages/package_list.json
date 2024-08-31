@@ -1,0 +1,26 @@
+{
+    "essentials": [
+        "vim",
+        "neofetch",
+        "curl",
+        "tcpdump",
+        "git",
+        "htop",
+        "wget"
+    ],
+    "tools": [
+        "nmap"
+    ],
+    "desktop_programs": [
+        "flatpak",
+        "alacritty",
+        "libreoffice",
+        "keepassxc",
+        "firefox",
+        "thunderbird"
+    ],
+    "flatpaks": [
+        "com.Spotify.client",
+        "org.signal.Signal"
+    ]
+}
