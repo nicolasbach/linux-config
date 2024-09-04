@@ -6,7 +6,9 @@
         "tcpdump",
         "git",
         "htop",
-        "wget"
+        "wget",
+        "gnupg",
+        "gnupg2"
     ],
     "tools": [
         "nmap"
