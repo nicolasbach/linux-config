@@ -23,5 +23,9 @@ alias grep='grep --color=auto'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias c='clear'
+alias q='exit'
+alias h='history'
+
 PS1='[\u@\h \W]\$ '
 neofetch
