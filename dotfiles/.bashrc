@@ -10,8 +10,11 @@ export HISTCONTROL=ignoreboth
 export HISTTIMEFORMAT='%F %T - '
 export HISTFILESIZE=20000
 export HISTSIZE=5000
-export PROMPT_COMMAND='history -a'
 shopt -s histappend
+export PROMPT_COMMAND='history -a'
+
+# Configure Environment 
+export EDITOR=vim
 
 # Alias configuration
 alias ls='ls --color=auto'
