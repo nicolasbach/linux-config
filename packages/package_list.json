@@ -8,7 +8,7 @@
         "htop",
         "wget",
         "gnupg",
-        "gnupg2"
+        "unzip"
     ],
     "tools": [
         "nmap"
@@ -19,10 +19,12 @@
         "libreoffice",
         "keepassxc",
         "firefox",
-        "thunderbird"
+        "thunderbird",
+        "vlc"
     ],
     "flatpaks": [
         "com.Spotify.client",
-        "org.signal.Signal"
+        "org.signal.Signal",
+        "com.discordapp.Discord"
     ]
 }
