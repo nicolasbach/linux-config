@@ -26,5 +26,10 @@
         "com.Spotify.client",
         "org.signal.Signal",
         "com.discordapp.Discord"
+    ],
+    "development": [
+        "python-pip",
+        "rust",
+        "rustup"
     ]
 }

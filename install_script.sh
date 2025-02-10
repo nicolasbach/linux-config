@@ -24,11 +24,6 @@ function get_packages {
     done
 }
 
-function install_gui {
-    echo "Installing Gnome"
-    pacman -S gnome
-    systemctl enable gdm.service
-}
 
 function configure_git {
     configured_user=$(sudo -u $loginuser git config --list | grep "user\.name" | cut -d '=' -f2)
@@ -54,6 +49,22 @@ function configure_git {
     fi
 }
 
+function install_gui {
+    echo "Installing Gnome"
+    pacman -S gnome
+    systemctl enable gdm.service
+}
+
+
+##############################
+#### Starting main Script ####
+##############################
+
+if [[ $(id -u) -ne 0 ]]; then
+    echo "Please run this script with sudo"
+    exit
+fi
+
 if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
     echo "Arch Linux detected"
     pacman -Syu
@@ -67,6 +78,7 @@ fi
 
 get_packages
 configure_git
+# install_gui
 
 # cp dotfiles/.vimrc ~/.vimrc
 # vim +PlugInstall +qall
