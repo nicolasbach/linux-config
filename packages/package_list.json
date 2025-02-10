@@ -8,7 +8,8 @@
         "htop",
         "wget",
         "gnupg",
-        "unzip"
+        "unzip",
+        "openssh"
     ],
     "vim_packages": [
         "cmake",
@@ -26,7 +27,8 @@
         "pipewire",
         "pipewire-pulse",
         "network-manager-applet",
-        "rofi"
+        "rofi",
+        "nautilus"
     ],
     "desktop_programs": [
         "flatpak",
