@@ -1,20 +1,63 @@
 #!/bin/bash
 
-linux_os=$(cat /etc/os-release | grep -E "^ID=.*$" | cut -d "=" -f2)
-linux_os_family=$(cat /etc/os-release | grep -E "^ID_LIKE=.*$" | cut -d "=" -f2)
 packages_file="packages/package_list.json"
-git_user="Nicolas Bach"
-git_mail="nicolas@mia3.de"
-git_branch="main"
 loginuser=$(logname)
+gui_installed=false
+
+
+function install_gui {
+    readarray -t desktop_programs < <(jq -r '.desktop_programs[]' "$packages_file")
+    readarray -t vim_packages < <(jq -r '.vim_packages[]' "$packages_file")
+    readarray -t window_manager < <(jq -r '.window_manager[]' "$packages_file")
+    readarray -t flatpaks < <(jq -r '.flatpaks[]' "$packages_file")
+
+    echo "Installing window manager packages"
+    for wmpackage in "${window_manager[@]}"; do
+        if ! pacman -Qi $wmpackage &> /dev/null; then
+            pacman -S --noconfirm $wmpackage
+        else
+            echo "$wmpackage already installed"
+        fi
+    done
+
+    # sddm config
+    sddm_enabled=$(systemctl is-enabled sddm)
+    if [[ sddm_enabled != "enabled" ]]; then
+        sudo systemctl enable sddm
+        echo "sddm enabled"
+    else
+        echo "sddm already enabled"
+    fi
+
+    # i3 Config
+    if diff -q configs/i3_config ~/.config/i3/config > /dev/null; then
+        "Config already in place"
+    else
+        cp configs/i3_config ~/.config/i3/config
+        echo "Copied i3 config"
+    fi
+
+    # Nerd Fonts for alacritty/vim config
+    if diff <(unzip -l stuff/FiraCode.zip | grep ttf | awk '{print $4}' | sort) <(ls -la ~/.local/share/fonts/ | grep -E "FiraCode.+ttf" | awk '{print $9}' | sort) > /dev/null; then
+        echo "Fonts already installed"
+    else
+        echo "Fira Code fonts not (fully) installed, installing..."
+        echo "Unzipping FiraCode"
+        unzip -d FiraCode stuff/FiraCode.zip
+        mkdir -p ~/.local/share/fonts
+        echo "Copying ttf"
+        cp FiraCode/*.ttf ~/.local/share/fonts/
+        echo "Deleting temp dir"
+        rm -r FiraCode
+    fi
+}
 
 function get_packages {
     readarray -t essentials < <(jq -r '.essentials[]' "$packages_file")
     readarray -t tools < <(jq -r '.tools[]' "$packages_file")
-    readarray -t desktop_programs < <(jq -r '.desktop_programs[]' "$packages_file")
-    readarray -t flatpaks < <(jq -r '.flatpaks[]' "$packages_file")
+    readarray -t development < <(jq -r '.development[]' "$packages_file")
 
-
+    echo "Installing essential packages"
     for essential in "${essentials[@]}"; do
         if ! pacman -Qi $essential &> /dev/null; then
             pacman -S --noconfirm $essential
@@ -22,37 +65,56 @@ function get_packages {
             echo "$essential already installed"
         fi
     done
+
+    echo "Installing tools"
+    for tool in "${tools[@]}"; do
+        if ! pacman -Qi $tool&> /dev/null; then
+            pacman -S --noconfirm tool$
+        else
+            echo "$tool already installed"
+        fi
+    done
+
+    read -p "Install window manager? (y/n): " opt
+    if [[ $opt == "y" ]] || [[ $opt == "Y" ]]; then
+        install_gui
+        gui_installed=true
+    else
+        echo "You chose no"
+    fi
 }
 
 
 function configure_git {
-    configured_user=$(sudo -u $loginuser git config --list | grep "user\.name" | cut -d '=' -f2)
-    configured_mail=$(sudo -u $loginuser git config --list | grep "user\.email" | cut -d '=' -f2)
-    default_branch=$(sudo -u $loginuser git config --list | grep "init\.defaultbranch" | cut -d '=' -f2)
-    if [[ $configured_user != $git_user  ]]; then
-        git config --global user.name "$git_user"
-        echo "Set username to $git_user"
+    if diff -q dotfiles/.gitconfig ~/.gitconfig > /dev/null; then
+        echo "Git config already exists"
     else
-        echo "Git User already set"
-    fi
-    if [[ $configured_mail != $git_mail ]]; then
-        git config --global user.mail "$git_mail"
-        echo "Set mail to $git_mail"
-    else
-        echo "Git Mail already set"
-    fi
-    if [[ $default_branch != $git_branch ]]; then
-        git config --global init.defaultBranch $git_branch
-        echo "Set git default branch to $git_branch"
-    else
-        echo "Git Branch already at main"
+        cp dotfiles/.gitconfig ~/.gitconfig
+        echo "Copied gitconfig"
     fi
 }
 
-function install_gui {
-    echo "Installing Gnome"
-    pacman -S gnome
-    systemctl enable gdm.service
+function configure_vim {
+    # vim config
+    PLUG_PATH="~/.vim/autoload/plug.vim"
+    if [ ! -f $PLUG_PATH ]; then
+        echo "Installing vim-plug..."
+        curl -fLo "$PLUG_PATH" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    fi
+    echo "Installing vim plugins"
+    vim -es -u "~/.vimrc" +PlugInstall +qall
+    cd ~/.vim/plugged/YouCompleteMe/
+    python3 install.py --clangd-completer --java-completer
+    cd ~
+}
+
+function configure_alacritty {
+    if diff -q configs/alacritty.toml ~/.config/alacritty.toml > /dev/null; then
+        echo "Alacritty config already in place"
+    else
+        cp configs/alacritty.toml ~/.config/alacritty.toml
+        echo "Alacritty config copied"
+    fi
 }
 
 
@@ -60,27 +122,29 @@ function install_gui {
 #### Starting main Script ####
 ##############################
 
-if [[ $(id -u) -ne 0 ]]; then
-    echo "Please run this script with sudo"
-    exit
-fi
-
 if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
     echo "Arch Linux detected"
-    pacman -Syu
+    sudo pacman -Syu
     if ! pacman -Qi jq &> /dev/null; then
         echo "jq isn't installed, installing it..."
         pacman -S --noconfirm jq
     else
         echo "jq is already installed"
     fi
+    get_packages
+    configure_git
+    if [[ $gui_installed = true ]]; then
+        echo "Configuring vim"
+        configure_vim
+        echo "Configured vim"
+        echo "Configuring alacritty"
+        configure_alacritty
+        echo "Configured alacritty"
+    else
+        echo "No gui installed so no extra configs necessary"
+    fi
+else
+    echo "This is no arch distro"
 fi
 
-get_packages
-configure_git
-# install_gui
 
-# cp dotfiles/.vimrc ~/.vimrc
-# vim +PlugInstall +qall
-# cd ~/.vim/plugged/YouCompleteMe/
-# python3 install.py --clangd-completer

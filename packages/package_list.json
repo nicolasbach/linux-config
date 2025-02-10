@@ -10,12 +10,26 @@
         "gnupg",
         "unzip"
     ],
+    "vim_packages": [
+        "cmake",
+        "base-devel",
+        "jre-openjdk"
+    ],
     "tools": [
         "nmap"
     ],
+    "window_manager": [
+        "i3-wm",
+        "i3status",
+        "alacritty",
+        "flameshot",
+        "pipewire",
+        "pipewire-pulse",
+        "network-manager-applet",
+        "rofi"
+    ],
     "desktop_programs": [
         "flatpak",
-        "alacritty",
         "libreoffice",
         "keepassxc",
         "firefox",
@@ -25,7 +39,8 @@
     "flatpaks": [
         "com.Spotify.client",
         "org.signal.Signal",
-        "com.discordapp.Discord"
+        "com.discordapp.Discord",
+        "com.eclipse.Java"
     ],
     "development": [
         "python-pip",
