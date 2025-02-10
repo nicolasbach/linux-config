@@ -1,4 +1,4 @@
-set nocompatible                        " No cimpatibility with vi
+set nocompatible                        " No compatibility with vi
 set number                              " Show Line Numbers
 set relativenumber                      " Show relative line numbers
 set showmatch                           " Show matching brackets
@@ -8,7 +8,7 @@ set expandtab                           " converts tabs to whitespace
 set encoding=UTF-8                      " Set Encoding for vim-devicons
 set scrolloff=999                       " Set cursor always in the center
 
-syntax on
+syntax enable
 filetype on
 filetype plugin on
 filetype indent on
@@ -35,12 +35,11 @@ Plug 'jiangmiao/auto-pairs'             " Auto pair brackts
 Plug 'sheerun/vim-polyglot'             " language pack
 Plug 'ycm-core/YouCompleteMe'           " Auto completion
 Plug 'Xuyuanp/nerdtree-git-plugin'      " NERDTree Git Status
+Plug 'mhinz/vim-startify'               " Vim Startscreen
 Plug 'ryanoasis/vim-devicons'           " Icons in NERDTree
 
 call plug#end()
 
-
-cabbrev bterm bo term
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -67,9 +66,10 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
 " Focus window
 autocmd VimEnter * NERDTree | wincmd p
-map <F2> :NERDTreeToggle<CR>
 
-
-
-
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom Keybindings "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <F3> :bo term<CR>
+nnoremap <F4> :w<CR>
