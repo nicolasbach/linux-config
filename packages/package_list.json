@@ -28,7 +28,8 @@
         "pipewire-pulse",
         "network-manager-applet",
         "rofi",
-        "nautilus"
+        "nautilus",
+        "feh"
     ],
     "desktop_programs": [
         "flatpak",
