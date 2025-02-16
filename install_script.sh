@@ -1,15 +1,14 @@
 #!/bin/bash
 
-packages_file="packages/package_list.json"
 loginuser=$(logname)
 gui_installed=false
 
 
 function install_gui {
-    readarray -t desktop_programs < <(jq -r '.desktop_programs[]' "$packages_file")
-    readarray -t vim_packages < <(jq -r '.vim_packages[]' "$packages_file")
-    readarray -t window_manager < <(jq -r '.window_manager[]' "$packages_file")
-    readarray -t flatpaks < <(jq -r '.flatpaks[]' "$packages_file")
+    readarray -t desktop_programs < packages/desktop_programs
+    readarray -t vim_packages < packages/vim_packages
+    readarray -t window_manager < packages/window_manager
+    readarray -t flatpaks < packages/flatpaks
 
     echo "Installing window manager packages"
     for wmpackage in "${window_manager[@]}"; do
@@ -53,9 +52,9 @@ function install_gui {
 }
 
 function get_packages {
-    readarray -t essentials < <(jq -r '.essentials[]' "$packages_file")
-    readarray -t tools < <(jq -r '.tools[]' "$packages_file")
-    readarray -t development < <(jq -r '.development[]' "$packages_file")
+    readarray -t essentials < packages/essentials
+    readarray -t tools < packages/tools
+    readarray -t development < packages/development
 
     echo "Installing essential packages"
     for essential in "${essentials[@]}"; do
@@ -125,12 +124,6 @@ function configure_alacritty {
 if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
     echo "Arch Linux detected"
     sudo pacman -Syu
-    if ! pacman -Qi jq &> /dev/null; then
-        echo "jq isn't installed, installing it..."
-        pacman -S --noconfirm jq
-    else
-        echo "jq is already installed"
-    fi
     get_packages
     configure_git
     if [[ $gui_installed = true ]]; then
