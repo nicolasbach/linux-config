@@ -39,8 +39,9 @@ require("lazy").setup({
         },
         {
             "folke/tokyonight.nvim", -- Theme from lazy
-            lazy = true,
-            opts = { style = "moon" }
+            lazy = false,
+            priority = 1000,
+            opts = {}
         },
         {
             "nvim-lualine/lualine.nvim", -- lualine, nicer line at the bottom
@@ -52,6 +53,11 @@ require("lazy").setup({
             "nvim-treesitter/nvim-treesitter",
             lazy = false,
             build = ":TSUpdate"
+        },
+        -- "nvim-lua/plenary.nvim",
+        {
+            "nvim-telescope/telescope.nvim", tag = "v0.2.0",
+            dependencies = { "nvim-lua/plenary.nvim" }
         },
         {
             "saghen/blink.cmp",
@@ -90,23 +96,21 @@ require("nvim-tree").setup({
         dotfiles = true,
     },
 })
--- Todos:
--- open file in new tabs/buffers
 
 ---------------------
 --- Lualine Setup ---
 ---------------------
 require('lualine').get_config()
 require('lualine').setup {
-	options = { theme = 'horizon' },
+	options = { theme = 'tokyonight' },
 }
--- show total lines
+
 
 -----------------
 --- LSP Setup ---
 -----------------
+-- Setup capabilities for lsp (defaults in this case)
 local capabilities = require('blink.cmp').get_lsp_capabilities()
-
 
 -- Rust Autocompletion
 vim.lsp.config('rust_analyzer', {
@@ -120,7 +124,7 @@ vim.lsp.config('pyright', {
 })
 vim.lsp.enable('pyright')
 
-
+-- Necessary for error messages
 vim.diagnostic.config({
     virtual_text = true,
     signs = true,
@@ -130,10 +134,22 @@ vim.diagnostic.config({
     float = { border = "rounded" },
 })
 
---------------------------
---- Custom Keybindings ---
---------------------------
+-----------------
+--- Telescope ---
+-----------------
+-- Fuzzy finding setup
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+
+---------------------
+--- Customization ---
+---------------------
 vim.api.nvim_set_keymap('n', '<F2>', ':NvimTreeToggle<CR>', {noremap= true})
 vim.api.nvim_set_keymap('n', '<F3>', ':bo term<CR>', {noremap= true})
-vim.api.nvim_set_keymap('n', '<F4>', ':w<CR>', {noremap= true})
-vim.api.nvim_set_keymap('n', '<F5>', ':pc<CR>', {noremap= true})
+vim.api.nvim_set_keymap('n', '<leader>w', ':w<CR>', {noremap= true})
+vim.api.nvim_set_keymap('n', '<leader>p', ':pc<CR>', {noremap= true})
+vim.api.nvim_set_keymap("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
+vim.cmd[[colorscheme tokyonight]]
