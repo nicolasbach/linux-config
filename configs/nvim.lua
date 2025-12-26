@@ -29,7 +29,7 @@ vim.opt.rtp:prepend(lazypath)
 --- Set vim options ---
 -----------------------
 --- maybe some are unnecessary
-vim.g.mapleader = " "
+vim.g.mapleader = "ö"
 vim.g.maplocalleader = "\\"
 vim.opt.number = true                 -- show line numbers
 vim.opt.relativenumber = true         -- show relative line numbers
@@ -50,6 +50,7 @@ vim.opt.mouse = "a"
 -- folke/tokyonight.nvim                # colorscheme
 -- kylechui/nvim-surround               # surround motions
 -- neovim/nvim-lspconfig                # lspconfig for autocompletion
+-- lewis6991/gitsigns.nvim              # Git plugin
 -- nvim-lualine/lualine.nvim            # lualine as an equivalent for airline
 -- nvim-tree/nvim-tree.lua              # filebrowser
 -- nvim-tree/nvim-web-devicons          # nerdfonts and icons for nvim-tree
@@ -81,8 +82,15 @@ require("lazy").setup({
             "nvim-lualine/lualine.nvim",
             dependencies = { "nvim-tree/nvim-web-devicons"}
         },
-        "nvim-tree/nvim-tree.lua", 
-        "nvim-tree/nvim-web-devicons", 
+        {
+            "lewis6991/gitsigns.nvim"
+        },
+        {
+            "nvim-tree/nvim-tree.lua"
+        },
+        {
+            "nvim-tree/nvim-web-devicons", 
+        },
         {
             "nvim-treesitter/nvim-treesitter",
             lazy = false,
@@ -111,7 +119,9 @@ require("lazy").setup({
             },
             opts_extend = { "sources.default" }
         },
-        "neovim/nvim-lspconfig",
+        {
+            "neovim/nvim-lspconfig"
+        },
     },
     install = { colorscheme = { "tokyonight" } },
 })
@@ -120,15 +130,15 @@ require("lazy").setup({
 --- NVIM Tree Setup ---
 -----------------------
 require("nvim-tree").setup({
-sort = {
-    sorter = "case_sensitive",
-},
-view = {
-    width = 30,
-},
-filters = {
-    dotfiles = true,
-},
+    sort = {
+        sorter = "case_sensitive",
+    },
+    view = {
+        width = 30,
+    },
+    filters = {
+        dotfiles = true,
+    },
 })
 
 ---------------------
@@ -136,7 +146,7 @@ filters = {
 ---------------------
 require('lualine').get_config()
 require('lualine').setup {
-options = { theme = 'tokyonight' },
+    options = { theme = 'tokyonight' },
 }
 
 -----------------
@@ -147,24 +157,24 @@ local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 -- Rust Autocompletion
 vim.lsp.config('rust_analyzer', {
-capabilities = capabilities
+    capabilities = capabilities
 })
 vim.lsp.enable('rust_analyzer')
 
 -- Python Auto Completion
 vim.lsp.config('pyright', {
-capabilities = capabilities
+    capabilities = capabilities
 })
 vim.lsp.enable('pyright')
 
 -- Necessary for error messages
 vim.diagnostic.config({
-virtual_text = true,
-signs = true,
-update_in_insert = false,
-underline = true,
-severity_sort = true,
-float = { border = "rounded" },
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = true,
+    float = { border = "rounded" },
 })
 
 -----------------
@@ -176,6 +186,18 @@ vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find f
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+
+-----------------
+--- Git Setup ---
+-----------------
+require("gitsigns").setup {
+    current_line_blame = false,
+    current_line_blame_opts = {
+        virt_text_pos = "eol",
+    }
+}
+
+vim.api.nvim_set_keymap("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
 
 ---------------------
 --- Customization ---
