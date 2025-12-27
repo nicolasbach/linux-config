@@ -130,7 +130,5 @@ q - Stop Recording
 | ds" | Surround -> Delete " around the current word |
 | cs'" | Surround -> Change ' to  " around the current word |
 
-```
-
 
 
