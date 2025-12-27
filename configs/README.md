@@ -42,6 +42,7 @@ Nerdfont is required
 sudo pacman -S rustup cargo ripgrep luarocks 
 # Optional
 rustup component add rust-analyzer 
+
 pacman -S neovim
 ```
 
@@ -112,6 +113,7 @@ q - Stop Recording
 | Key | Action |
 | --- | --- |
 | Leader | ö |
+| Leader + n | disable highlighting after search (:noh) |
 | Leader + w | Save file without quitting |
 | Leader + W | Show trailing whitespaces | 
 | Leader + k | toggle nvim-tree |
