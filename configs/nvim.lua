@@ -11,17 +11,17 @@
 ---------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-local out = vim.fn.system({"git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath})
-if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({
-        { "Failed to clone lazy.vim:\n", "ErrorMsg" },
-        { out, "WarningMsg" },
-        { "\nPress any key to exit..." },
-    }, true, {})
-    vim.fn.getchar()
-    os.exit(1)
-end
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = vim.fn.system({"git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath})
+    if vim.v.shell_error ~= 0 then
+        vim.api.nvim_echo({
+            { "Failed to clone lazy.vim:\n", "ErrorMsg" },
+            { out, "WarningMsg" },
+            { "\nPress any key to exit..." },
+        }, true, {})
+        vim.fn.getchar()
+        os.exit(1)
+    end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -42,11 +42,13 @@ vim.opt.scrolloff = 999               -- keep cursor in the middle
 vim.opt.encoding = "utf-8"            -- set encoding to utf-8
 vim.opt.termguicolors = true          -- set to false to get opacity
 vim.opt.mouse = "a"
+vim.opt.hidden = true
 
 ---------------------
 --- Setup Plugins ---
 ---------------------
 -- Plugin List:
+-- akinsho/bufferline.nvim
 -- folke/tokyonight.nvim                # colorscheme
 -- kylechui/nvim-surround               # surround motions
 -- neovim/nvim-lspconfig                # lspconfig for autocompletion
@@ -60,6 +62,11 @@ vim.opt.mouse = "a"
 -- windwp/nvim-autopairs                # auto pairs
 require("lazy").setup({
     spec = {
+        {
+            "akinsho/bufferline.nvim",
+            version = "*",
+            dependencies = { "nvim-tree/nvim-web-devicons"}
+        },
         {
             "windwp/nvim-autopairs", 
             event = "InsertEnter",
@@ -141,14 +148,28 @@ require("nvim-tree").setup({
     },
 })
 
----------------------
---- Lualine Setup ---
----------------------
+----------------------------------
+--- Lualine & Bufferline Setup ---
+----------------------------------
 require('lualine').get_config()
 require('lualine').setup {
     options = { theme = 'tokyonight' },
 }
 
+require("bufferline").setup{
+    options = {
+        indicator = {
+            style = "underline"
+        },
+        separator_style = "thick",
+        show_buffer_close_icons = false,
+        show_close_icons = false,
+        hover = {
+            enabled = false
+        }
+    }
+
+}
 -----------------
 --- LSP Setup ---
 -----------------
@@ -208,6 +229,18 @@ vim.api.nvim_set_keymap("n", "<leader>t", ":bo term<CR>i", { desc = "open termin
 vim.api.nvim_set_keymap("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
 vim.api.nvim_set_keymap("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
 vim.api.nvim_set_keymap("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
+vim.api.nvim_set_keymap("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
+vim.api.nvim_set_keymap("n", "<leader>B", ":bp<CR>", { desc = "previous buffer"})
+vim.api.nvim_set_keymap("n", "<leader>db", ":bd<CR>", { desc = "delete current buffer"})
+vim.api.nvim_set_keymap("n", "<leader>1", ":BufferLineGoToBuffer 1<CR>", { desc = "Go to buffer 1"})
+vim.api.nvim_set_keymap("n", "<leader>2", ":BufferLineGoToBuffer 2<CR>", { desc = "Go to buffer 2"})
+vim.api.nvim_set_keymap("n", "<leader>3", ":BufferLineGoToBuffer 3<CR>", { desc = "Go to buffer 3"})
+vim.api.nvim_set_keymap("n", "<leader>4", ":BufferLineGoToBuffer 4<CR>", { desc = "Go to buffer 4"})
+vim.api.nvim_set_keymap("n", "<leader>5", ":BufferLineGoToBuffer 5<CR>", { desc = "Go to buffer 5"})
+vim.api.nvim_set_keymap("n", "<leader>6", ":BufferLineGoToBuffer 6<CR>", { desc = "Go to buffer 6"})
+vim.api.nvim_set_keymap("n", "<leader>7", ":BufferLineGoToBuffer 7<CR>", { desc = "Go to buffer 7"})
+vim.api.nvim_set_keymap("n", "<leader>8", ":BufferLineGoToBuffer 8<CR>", { desc = "Go to buffer 8"})
+vim.api.nvim_set_keymap("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", { desc = "Go to buffer 9"})
 vim.api.nvim_set_keymap("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"})
 vim.api.nvim_set_keymap("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"})
 
