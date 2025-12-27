@@ -51,13 +51,15 @@ vim.opt.hidden = true
 -- akinsho/bufferline.nvim
 -- folke/tokyonight.nvim                # colorscheme
 -- kylechui/nvim-surround               # surround motions
--- neovim/nvim-lspconfig                # lspconfig for autocompletion
 -- lewis6991/gitsigns.nvim              # Git plugin
+-- neovim/nvim-lspconfig                # lspconfig for autocompletion
+-- nvimdev/dashboard-nvim               # Dashboard like vim-startify
 -- nvim-lualine/lualine.nvim            # lualine as an equivalent for airline
 -- nvim-tree/nvim-tree.lua              # filebrowser
 -- nvim-tree/nvim-web-devicons          # nerdfonts and icons for nvim-tree
 -- nvim-treesitter/nvim-treesitter      # Treesitter
 -- nvim-telescope/telescope.nvim        # fuzzy finding
+-- MeanderingProgrammer/render-markdown.nvim
 -- saghen/blink.cmp                     # lsp client
 -- windwp/nvim-autopairs                # auto pairs
 require("lazy").setup({
@@ -68,7 +70,7 @@ require("lazy").setup({
             dependencies = { "nvim-tree/nvim-web-devicons"}
         },
         {
-            "windwp/nvim-autopairs", 
+            "windwp/nvim-autopairs",
             event = "InsertEnter",
             config = true
         },
@@ -86,17 +88,30 @@ require("lazy").setup({
             opts = {}
         },
         {
-            "nvim-lualine/lualine.nvim",
-            dependencies = { "nvim-tree/nvim-web-devicons"}
+            "lewis6991/gitsigns.nvim"
         },
         {
-            "lewis6991/gitsigns.nvim"
+            "nvimdev/dashboard-nvim",
+            event = "VimEnter",
+            config = function()
+                require("dashboard").setup {
+                    theme = "hyper",
+                    config = {
+                        packages = { enable = true },
+                    }
+                }
+            end,
+            dependencies = { "nvim-tree/nvim-web-devicons" }
+        },
+        {
+            "nvim-lualine/lualine.nvim",
+            dependencies = { "nvim-tree/nvim-web-devicons"}
         },
         {
             "nvim-tree/nvim-tree.lua"
         },
         {
-            "nvim-tree/nvim-web-devicons", 
+            "nvim-tree/nvim-web-devicons",
         },
         {
             "nvim-treesitter/nvim-treesitter",
@@ -106,6 +121,13 @@ require("lazy").setup({
         {
             "nvim-telescope/telescope.nvim", tag = "v0.2.0",
             dependencies = { "nvim-lua/plenary.nvim" }
+        },
+        {
+            "MeanderingProgrammer/render-markdown.nvim",
+            dependencies =  { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+            ---@module "render-markdown"
+            ---@type render.md.UserConfig
+            opts = {}
         },
         {
             "saghen/blink.cmp",
@@ -133,30 +155,10 @@ require("lazy").setup({
     install = { colorscheme = { "tokyonight" } },
 })
 
------------------------
---- NVIM Tree Setup ---
------------------------
-require("nvim-tree").setup({
-    sort = {
-        sorter = "case_sensitive",
-    },
-    view = {
-        width = 30,
-    },
-    filters = {
-        dotfiles = true,
-    },
-})
 
-----------------------------------
---- Lualine & Bufferline Setup ---
-----------------------------------
--- Lualine --
-require('lualine').get_config()
-require('lualine').setup {
-    options = { theme = 'tokyonight' },
-}
-
+-----------------------------
+--- Plugin Configurations ---
+-----------------------------
 -- Bufferline --
 require("bufferline").setup{
     options = {
@@ -171,10 +173,51 @@ require("bufferline").setup{
         }
     }
 }
+
+-- Colorscheme --
+vim.cmd[[colorscheme tokyonight]]
+
+
+--- Git ---
+require("gitsigns").setup {
+    signcolumn = false,
+    current_line_blame = false,
+    current_line_blame_opts = {
+        virt_text_pos = "eol",
+    }
+}
+
+-- Lualine --
+require('lualine').get_config()
+require('lualine').setup {
+    options = { theme = 'tokyonight' },
+}
+
+-- Markdown --
+require("render-markdown").setup({
+    enabled = false,
+    completions = {
+        lsp = { enabled = true }
+    },
+})
+
+-- NVIM Tree --
+require("nvim-tree").setup({
+    sort = {
+        sorter = "case_sensitive",
+    },
+    view = {
+        width = 30,
+    },
+    filters = {
+        dotfiles = true,
+    },
+})
+
 -----------------
 --- LSP Setup ---
 -----------------
--- Setup capabilities for lsp (defaults in this case) --
+-- capabilities for lsp (defaults in this case) --
 local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 -- Rust Autocompletion --
@@ -188,7 +231,6 @@ vim.lsp.config('pyright', {
     capabilities = capabilities
 })
 vim.lsp.enable('pyright')
-
 -- Necessary for error messages --
 vim.diagnostic.config({
     virtual_text = true,
@@ -199,35 +241,9 @@ vim.diagnostic.config({
     float = { border = "rounded" },
 })
 
------------------
---- Telescope ---
------------------
--- Fuzzy finding --
-local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
-
------------------
---- Git Setup ---
------------------
-require("gitsigns").setup {
-    current_line_blame = false,
-    current_line_blame_opts = {
-        virt_text_pos = "eol",
-    }
-}
-
--- toggle blame for the current line --
-vim.api.nvim_set_keymap("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
-
----------------------
---- Customization ---
----------------------
--- Colorscheme --
-vim.cmd[[colorscheme tokyonight]]
-
+-------------------
+--- Keybindings ---
+-------------------
 -- General bindings --
 vim.api.nvim_set_keymap("n", "<leader>k", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
 vim.api.nvim_set_keymap("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new Buffer"}) -- opens terminal at the bottom
@@ -248,6 +264,20 @@ vim.api.nvim_set_keymap("n", "<leader>6", ":BufferLineGoToBuffer 6<CR>", { desc 
 vim.api.nvim_set_keymap("n", "<leader>7", ":BufferLineGoToBuffer 7<CR>", { desc = "Go to buffer 7"})
 vim.api.nvim_set_keymap("n", "<leader>8", ":BufferLineGoToBuffer 8<CR>", { desc = "Go to buffer 8"})
 vim.api.nvim_set_keymap("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", { desc = "Go to buffer 9"})
+
+-- Git bindings --
+vim.api.nvim_set_keymap("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
+vim.api.nvim_set_keymap("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Show current dif"})
+vim.api.nvim_set_keymap("n", "<leader>gts", ":Gitsigns toggle_signs<CR>", { desc = "toggle signs on the side"})
+
+-- Fuzzy finding with Telescope
+vim.api.nvim_set_keymap("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Telescope find files" })
+vim.api.nvim_set_keymap("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Telescope live grep" })
+vim.api.nvim_set_keymap("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Telescope buffers" })
+vim.api.nvim_set_keymap("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Telescope help tags" })
+
+-- Markdown
+vim.api.nvim_set_keymap("n", "<leader>rm", ":RenderMarkdown toggle<CR>", { desc = "Turn Markdown rendering on and off"})
 
 -- Special Bindings --
 vim.api.nvim_set_keymap("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
