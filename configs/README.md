@@ -74,7 +74,9 @@ d$ - delete until EOL
 #### Advanced
 Visual Mode
 ```
-v - enter visual mode
+v - enter char-wise visual mode
+V - line-wise visual mode
+Ctrl + v - block-wise visual mode
 j/k - select whole lines
 > move indentation to the right
 < move indentation to the left
