@@ -2,4 +2,11 @@
 	email = nicolas@mia3.de
 	name = Nicolas Bach
 [init]
-	defaultBranch = main
+    defaultBranch = main
+[alias]
+    cam = commit -am
+    l = log --oneline
+    p = pull
+    s = status
+    sm = switch main
+
