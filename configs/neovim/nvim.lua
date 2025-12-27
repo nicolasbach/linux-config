@@ -254,7 +254,7 @@ vim.diagnostic.config({
 --- Keybindings ---
 -------------------
 -- General bindings --
-vim.keymap.set("n", "<leader>k", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
+vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
 vim.keymap.set("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new Buffer"}) -- opens terminal at the bottom
 vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
 vim.keymap.set("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
@@ -296,4 +296,5 @@ vim.keymap.set("n", "<leader>c", "zM")
 -- Special Bindings --
 vim.keymap.set("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"}) -- makes it easier to get to normal mode in the terminal (for example for yanking)
+vim.keymap.set("n", "<leader>yy", [["+yy]], { desc = "Copy line to system clipboard" })
 

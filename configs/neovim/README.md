@@ -110,6 +110,11 @@ q - Stop Recording
 
 ```
 
+Stuff
+```
+"+yy - copy to system clipboard (maybe * instead of +)
+```
+
 
 ### Keybindings
 | Key | Action |
