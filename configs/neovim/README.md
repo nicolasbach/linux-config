@@ -133,6 +133,9 @@ q - Stop Recording
 | ysiw" | Surround -> Add " around the current word |
 | ds" | Surround -> Delete " around the current word |
 | cs'" | Surround -> Change ' to  " around the current word |
+| Leader + a | Toggle fold under cursor |
+| Leader + o | Open all folds |
+| Leader + c | Close all folds |
 
 
 

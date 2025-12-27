@@ -28,7 +28,6 @@ vim.opt.rtp:prepend(lazypath)
 -----------------------
 --- Set vim options ---
 -----------------------
---- maybe some are unnecessary --
 vim.g.mapleader = "ö"
 vim.g.maplocalleader = "\\"
 vim.opt.number = true                 -- show line numbers
@@ -43,6 +42,15 @@ vim.opt.encoding = "utf-8"            -- set encoding to utf-8
 vim.opt.termguicolors = true          -- set to false to get opacity
 vim.opt.mouse = "a"
 vim.opt.hidden = true
+-- Folding --
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldcolumn = "0"
+vim.opt.foldtext = ""
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 0
+vim.opt.foldnestmax = 1
+vim.opt.foldenable = false
 
 ---------------------
 --- Setup Plugins ---
@@ -67,7 +75,7 @@ require("lazy").setup({
         {
             "akinsho/bufferline.nvim",
             version = "*",
-            dependencies = { "nvim-tree/nvim-web-devicons"}
+            dependencies = { "nvim-tree/nvim-web-devicons" }
         },
         {
             "windwp/nvim-autopairs",
@@ -214,6 +222,7 @@ require("nvim-tree").setup({
     },
 })
 
+
 -----------------
 --- LSP Setup ---
 -----------------
@@ -245,41 +254,46 @@ vim.diagnostic.config({
 --- Keybindings ---
 -------------------
 -- General bindings --
-vim.api.nvim_set_keymap("n", "<leader>k", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
-vim.api.nvim_set_keymap("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new Buffer"}) -- opens terminal at the bottom
-vim.api.nvim_set_keymap("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
-vim.api.nvim_set_keymap("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
-vim.api.nvim_set_keymap("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
+vim.keymap.set("n", "<leader>k", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
+vim.keymap.set("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new Buffer"}) -- opens terminal at the bottom
+vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
+vim.keymap.set("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
+vim.keymap.set("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
 
 -- Buffer related bindings --
-vim.api.nvim_set_keymap("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
-vim.api.nvim_set_keymap("n", "<leader>B", ":bp<CR>", { desc = "previous buffer"})
-vim.api.nvim_set_keymap("n", "<leader>db", ":bd<CR>", { desc = "delete current buffer"})
-vim.api.nvim_set_keymap("n", "<leader>1", ":BufferLineGoToBuffer 1<CR>", { desc = "Go to buffer 1"})
-vim.api.nvim_set_keymap("n", "<leader>2", ":BufferLineGoToBuffer 2<CR>", { desc = "Go to buffer 2"})
-vim.api.nvim_set_keymap("n", "<leader>3", ":BufferLineGoToBuffer 3<CR>", { desc = "Go to buffer 3"})
-vim.api.nvim_set_keymap("n", "<leader>4", ":BufferLineGoToBuffer 4<CR>", { desc = "Go to buffer 4"})
-vim.api.nvim_set_keymap("n", "<leader>5", ":BufferLineGoToBuffer 5<CR>", { desc = "Go to buffer 5"})
-vim.api.nvim_set_keymap("n", "<leader>6", ":BufferLineGoToBuffer 6<CR>", { desc = "Go to buffer 6"})
-vim.api.nvim_set_keymap("n", "<leader>7", ":BufferLineGoToBuffer 7<CR>", { desc = "Go to buffer 7"})
-vim.api.nvim_set_keymap("n", "<leader>8", ":BufferLineGoToBuffer 8<CR>", { desc = "Go to buffer 8"})
-vim.api.nvim_set_keymap("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", { desc = "Go to buffer 9"})
+vim.keymap.set("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
+vim.keymap.set("n", "<leader>B", ":bp<CR>", { desc = "previous buffer"})
+vim.keymap.set("n", "<leader>db", ":bd<CR>", { desc = "delete current buffer"})
+vim.keymap.set("n", "<leader>1", ":BufferLineGoToBuffer 1<CR>", { desc = "Go to buffer 1"})
+vim.keymap.set("n", "<leader>2", ":BufferLineGoToBuffer 2<CR>", { desc = "Go to buffer 2"})
+vim.keymap.set("n", "<leader>3", ":BufferLineGoToBuffer 3<CR>", { desc = "Go to buffer 3"})
+vim.keymap.set("n", "<leader>4", ":BufferLineGoToBuffer 4<CR>", { desc = "Go to buffer 4"})
+vim.keymap.set("n", "<leader>5", ":BufferLineGoToBuffer 5<CR>", { desc = "Go to buffer 5"})
+vim.keymap.set("n", "<leader>6", ":BufferLineGoToBuffer 6<CR>", { desc = "Go to buffer 6"})
+vim.keymap.set("n", "<leader>7", ":BufferLineGoToBuffer 7<CR>", { desc = "Go to buffer 7"})
+vim.keymap.set("n", "<leader>8", ":BufferLineGoToBuffer 8<CR>", { desc = "Go to buffer 8"})
+vim.keymap.set("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", { desc = "Go to buffer 9"})
 
 -- Git bindings --
-vim.api.nvim_set_keymap("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
-vim.api.nvim_set_keymap("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Show current dif"})
-vim.api.nvim_set_keymap("n", "<leader>gts", ":Gitsigns toggle_signs<CR>", { desc = "toggle signs on the side"})
+vim.keymap.set("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
+vim.keymap.set("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Show current dif"})
+vim.keymap.set("n", "<leader>gts", ":Gitsigns toggle_signs<CR>", { desc = "toggle signs on the side"})
 
 -- Fuzzy finding with Telescope
-vim.api.nvim_set_keymap("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Telescope find files" })
-vim.api.nvim_set_keymap("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Telescope live grep" })
-vim.api.nvim_set_keymap("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Telescope buffers" })
-vim.api.nvim_set_keymap("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Telescope help tags" })
+vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Telescope live grep" })
+vim.keymap.set("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Telescope buffers" })
+vim.keymap.set("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Telescope help tags" })
 
 -- Markdown
-vim.api.nvim_set_keymap("n", "<leader>rm", ":RenderMarkdown toggle<CR>", { desc = "Turn Markdown rendering on and off"})
+vim.keymap.set("n", "<leader>rm", ":RenderMarkdown toggle<CR>", { desc = "Turn Markdown rendering on and off"})
+
+-- Folds
+vim.keymap.set("n", "<leader>a", "za")
+vim.keymap.set("n", "<leader>o", "zR")
+vim.keymap.set("n", "<leader>c", "zM")
 
 -- Special Bindings --
-vim.api.nvim_set_keymap("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
-vim.api.nvim_set_keymap("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"}) -- makes it easier to get to normal mode in the terminal (for example for yanking)
+vim.keymap.set("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"}) -- makes it easier to get to normal mode in the terminal (for example for yanking)
 
