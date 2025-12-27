@@ -28,7 +28,7 @@ vim.opt.rtp:prepend(lazypath)
 -----------------------
 --- Set vim options ---
 -----------------------
---- maybe some are unnecessary
+--- maybe some are unnecessary --
 vim.g.mapleader = "ö"
 vim.g.maplocalleader = "\\"
 vim.opt.number = true                 -- show line numbers
@@ -114,9 +114,9 @@ require("lazy").setup({
             opts = {
                 keymap = {
                     preset = "default",
-                    ["<Tab>"] = { "select_next", "fallback"},
-                    ["<S-Tab>"] = {"select_prev", "fallback"},
-                    ["<CR>"] = { "select_and_accept", "fallback" },
+                    ["<Tab>"] = { "select_next", "fallback"}, -- use tab to select items
+                    ["<S-Tab>"] = {"select_prev", "fallback"}, -- go backwards at the selection via Shift Tab
+                    ["<CR>"] = { "select_and_accept", "fallback" }, -- select item with Enter
                 },
                 completion = { documentation = { auto_show = false } },
                 sources = {
@@ -151,11 +151,13 @@ require("nvim-tree").setup({
 ----------------------------------
 --- Lualine & Bufferline Setup ---
 ----------------------------------
+-- Lualine --
 require('lualine').get_config()
 require('lualine').setup {
     options = { theme = 'tokyonight' },
 }
 
+-- Bufferline --
 require("bufferline").setup{
     options = {
         indicator = {
@@ -168,27 +170,26 @@ require("bufferline").setup{
             enabled = false
         }
     }
-
 }
 -----------------
 --- LSP Setup ---
 -----------------
--- Setup capabilities for lsp (defaults in this case)
+-- Setup capabilities for lsp (defaults in this case) --
 local capabilities = require('blink.cmp').get_lsp_capabilities()
 
--- Rust Autocompletion
+-- Rust Autocompletion --
 vim.lsp.config('rust_analyzer', {
     capabilities = capabilities
 })
 vim.lsp.enable('rust_analyzer')
 
--- Python Auto Completion
+-- Python Auto Completion --
 vim.lsp.config('pyright', {
     capabilities = capabilities
 })
 vim.lsp.enable('pyright')
 
--- Necessary for error messages
+-- Necessary for error messages --
 vim.diagnostic.config({
     virtual_text = true,
     signs = true,
@@ -201,7 +202,7 @@ vim.diagnostic.config({
 -----------------
 --- Telescope ---
 -----------------
--- Fuzzy finding setup
+-- Fuzzy finding --
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
@@ -218,17 +219,23 @@ require("gitsigns").setup {
     }
 }
 
+-- toggle blame for the current line --
 vim.api.nvim_set_keymap("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
 
 ---------------------
 --- Customization ---
 ---------------------
+-- Colorscheme --
 vim.cmd[[colorscheme tokyonight]]
+
+-- General bindings --
 vim.api.nvim_set_keymap("n", "<leader>k", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
-vim.api.nvim_set_keymap("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new Buffer"})
+vim.api.nvim_set_keymap("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new Buffer"}) -- opens terminal at the bottom
 vim.api.nvim_set_keymap("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
 vim.api.nvim_set_keymap("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
 vim.api.nvim_set_keymap("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
+
+-- Buffer related bindings --
 vim.api.nvim_set_keymap("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
 vim.api.nvim_set_keymap("n", "<leader>B", ":bp<CR>", { desc = "previous buffer"})
 vim.api.nvim_set_keymap("n", "<leader>db", ":bd<CR>", { desc = "delete current buffer"})
@@ -241,6 +248,8 @@ vim.api.nvim_set_keymap("n", "<leader>6", ":BufferLineGoToBuffer 6<CR>", { desc 
 vim.api.nvim_set_keymap("n", "<leader>7", ":BufferLineGoToBuffer 7<CR>", { desc = "Go to buffer 7"})
 vim.api.nvim_set_keymap("n", "<leader>8", ":BufferLineGoToBuffer 8<CR>", { desc = "Go to buffer 8"})
 vim.api.nvim_set_keymap("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", { desc = "Go to buffer 9"})
-vim.api.nvim_set_keymap("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"})
-vim.api.nvim_set_keymap("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"})
+
+-- Special Bindings --
+vim.api.nvim_set_keymap("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
+vim.api.nvim_set_keymap("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"}) -- makes it easier to get to normal mode in the terminal (for example for yanking)
 
