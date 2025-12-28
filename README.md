@@ -2,6 +2,8 @@
 
 Personal Configuration and Setup Script
 
+Edit: Install script is untested since moving to neovim and hyprland. Also, waybar nor its config are getting installed at the moment. When I have time, I will fix the script and test it
+
 This is a personal repository. The install script is only intended to work on baseline arch linux and nothing else.
 
 The focus is, to keep track of all needed packages. The install script isn't tested on a new system!
@@ -29,8 +31,14 @@ Programs I need, when some sort of gui is installed. Basic stuff like a browser,
 cmdline Tools I occasionally use like nmap 
 
 
-## Window Manager
+## i3 packages
 all packages necessary to launch i3 window manager (can be switched in the future, also packages like rofi or flameshot will be needed regardless of the WM)
+
+## hyprland_packages
+packages necessary for my hyprland setup
+
+## nvim_packages
+packages necessary for my neovim setup
 
 
 # Wallpapers
