@@ -7,17 +7,48 @@ gui_installed=false
 function install_gui {
     readarray -t desktop_programs < packages/desktop_programs
     readarray -t vim_packages < packages/vim_packages
-    readarray -t window_manager < packages/window_manager
     readarray -t flatpaks < packages/flatpaks
 
-    echo "Installing window manager packages"
-    for wmpackage in "${window_manager[@]}"; do
-        if ! pacman -Qi $wmpackage &> /dev/null; then
-            pacman -S --noconfirm $wmpackage
+    read -p "Install hyprland? (y/n): " opt
+    if [[ $opt == "y"]]; then
+        # Install necessary packages for hyprland
+        readarray -t hyprland_packages < packages/hyprland_packages
+        echo "Installing hyprland packages"
+        for wmpackage in "${hyprland_packages[@]}"; do
+            if ! pacman -Qi $wmpackage &> /dev/null; then
+                pacman -S --noconfirm $wmpackage
+            else
+                echo "$wmpackage already installed"
+            fi
+        done
+        # Copy to hyprland configs to config dir
+        if diff -q configs/hyprland/hyprland.conf ~/.config/hypr/hyprland.conf > /dev/null; then
+            echo "Config already in place"
         else
-            echo "$wmpackage already installed"
+            mkdir ~/.config/hypr
+            cp -r configs/hyprland/* ~/.config/hypr/
+            echo "Copied hyprland config"
         fi
-    done
+    else
+        # Install necessary packages for i3
+        readarray -t i3_packages < packages/i3_packages
+        echo "Installing window manager packages"
+        for wmpackage in "${i3_packages_manager[@]}"; do
+            if ! pacman -Qi $wmpackage &> /dev/null; then
+                pacman -S --noconfirm $wmpackage
+            else
+                echo "$wmpackage already installed"
+            fi
+        done
+
+        # Copy i3 config to config dir
+        if diff -q configs/i3_config ~/.config/i3/config > /dev/null; then
+            echo "Config already in place"
+        else
+            cp configs/i3_config ~/.config/i3/config
+            echo "Copied i3 config"
+        fi
+    fi
 
     # sddm config
     sddm_enabled=$(systemctl is-enabled sddm)
@@ -26,14 +57,6 @@ function install_gui {
         echo "sddm enabled"
     else
         echo "sddm already enabled"
-    fi
-
-    # i3 Config
-    if diff -q configs/i3_config ~/.config/i3/config > /dev/null; then
-        "Config already in place"
-    else
-        cp configs/i3_config ~/.config/i3/config
-        echo "Copied i3 config"
     fi
 
     # Nerd Fonts for alacritty/vim config
