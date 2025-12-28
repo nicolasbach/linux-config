@@ -228,6 +228,7 @@ require("nvim-tree").setup({
 -----------------
 -- capabilities for lsp (defaults in this case) --
 local capabilities = require('blink.cmp').get_lsp_capabilities()
+local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 -- Rust Autocompletion --
 vim.lsp.config('rust_analyzer', {
@@ -240,6 +241,12 @@ vim.lsp.config('pyright', {
     capabilities = capabilities
 })
 vim.lsp.enable('pyright')
+
+-- Html Auto Completion --
+vim.lsp.config('html', {
+    capabilities = capabilities,
+})
+vim.lsp.enable('html')
 -- Necessary for error messages --
 vim.diagnostic.config({
     virtual_text = true,
@@ -259,6 +266,8 @@ vim.keymap.set("n", "<leader>t", ":bo term<CR>i", { desc = "open terminal in new
 vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
 vim.keymap.set("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
 vim.keymap.set("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
+vim.keymap.set("v", ">", ">gv", { desc = "reselect in visual mode for right indentation"}) -- reselect previous selection in visual mode for indentation
+vim.keymap.set("v", "<", "<gv", { desc = "reselect in visual mode for left indentation"}) -- reselect previous selection in visual mode for indentation
 
 -- Buffer related bindings --
 vim.keymap.set("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
