@@ -85,10 +85,10 @@ function get_packages {
 
 
 function configure_git {
-    if diff -q dotfiles/.gitconfig ~/.gitconfig > /dev/null; then
+    if diff -q configs/gitconfig ~/.gitconfig > /dev/null; then
         echo "Git config already exists"
     else
-        cp dotfiles/.gitconfig ~/.gitconfig
+        cp configs/gitconfig ~/.gitconfig
         echo "Copied gitconfig"
     fi
 }
@@ -104,6 +104,12 @@ function configure_vim {
     vim -es -u "~/.vimrc" +PlugInstall +qall
     cd ~/.vim/plugged/YouCompleteMe/
     python3 install.py --clangd-completer --java-completer
+    cd ~
+}
+
+function configure_nvim {
+    mkdir -p ~/.config/nvim
+    cp configs/neovim/nvim.lua ~/.config/nvim/init.lua
     cd ~
 }
 
@@ -127,9 +133,15 @@ if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
     get_packages
     configure_git
     if [[ $gui_installed = true ]]; then
-        echo "Configuring vim"
-        configure_vim
-        echo "Configured vim"
+        echo "Configuring editor..."
+        read -p "Do you want to configure neovim? Falls back to vim! (y/n): " opt
+        if [[ $opt == "y" ]] || [[ $opt == "Y" ]]; then
+            configure_nvim
+            echo "Configured neovim"
+        else
+            configure_vim
+            echo "Configured vim"
+        fi
         echo "Configuring alacritty"
         configure_alacritty
         echo "Configured alacritty"

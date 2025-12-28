@@ -113,6 +113,9 @@ q - Stop Recording
 Stuff
 ```
 "+yy - copy to system clipboard (maybe * instead of +)
+:%sort - sort whole file, also possible by selection in visual mode
+:%sort! - reverse sort
+:%s/Pattern/pattern/g - search and replace
 ```
 
 
