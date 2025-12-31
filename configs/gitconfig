@@ -1,12 +1,18 @@
 [user]
 	email = nicolas@mia3.de
 	name = Nicolas Bach
+	signingkey = CE236C6D2242C37DC1F3F75D7CB135B43A82BAC8
 [init]
-    defaultBranch = main
+	defaultBranch = main
 [alias]
+    a = add
+    c = commit -m
     cam = commit -am
     l = log --oneline
-    p = pull
-    s = status
-    sm = switch main
-
+	p = pull
+	s = status
+	sm = switch
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = true
