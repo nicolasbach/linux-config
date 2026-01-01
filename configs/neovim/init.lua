@@ -61,7 +61,6 @@ vim.opt.foldenable = false
 -- kylechui/nvim-surround               # surround motions
 -- lewis6991/gitsigns.nvim              # Git plugin
 -- neovim/nvim-lspconfig                # lspconfig for autocompletion
--- nvimdev/dashboard-nvim               # Dashboard like vim-startify
 -- nvim-lualine/lualine.nvim            # lualine as an equivalent for airline
 -- nvim-tree/nvim-tree.lua              # filebrowser
 -- nvim-tree/nvim-web-devicons          # nerdfonts and icons for nvim-tree
@@ -97,19 +96,6 @@ require("lazy").setup({
         },
         {
             "lewis6991/gitsigns.nvim"
-        },
-        {
-            "nvimdev/dashboard-nvim",
-            event = "VimEnter",
-            config = function()
-                require("dashboard").setup {
-                    theme = "hyper",
-                    config = {
-                        packages = { enable = true },
-                    }
-                }
-            end,
-            dependencies = { "nvim-tree/nvim-web-devicons" }
         },
         {
             "nvim-lualine/lualine.nvim",
@@ -211,6 +197,8 @@ require("render-markdown").setup({
 })
 
 -- NVIM Tree --
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 require("nvim-tree").setup({
     sort = {
         sorter = "case_sensitive",
@@ -219,7 +207,7 @@ require("nvim-tree").setup({
         width = 30,
     },
     filters = {
-        dotfiles = true,
+        dotfiles = false,
     },
 })
 
@@ -258,6 +246,7 @@ vim.diagnostic.config({
     float = { border = "rounded" },
 })
 
+
 -------------------
 --- Keybindings ---
 -------------------
@@ -289,19 +278,23 @@ vim.keymap.set("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { d
 vim.keymap.set("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Show current dif"})
 vim.keymap.set("n", "<leader>gts", ":Gitsigns toggle_signs<CR>", { desc = "toggle signs on the side"})
 
--- Fuzzy finding with Telescope
+-- Fuzzy finding with Telescope --
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Telescope find files" })
 vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Telescope live grep" })
 vim.keymap.set("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Telescope help tags" })
 
--- Markdown
+-- Markdown --
 vim.keymap.set("n", "<leader>rm", ":RenderMarkdown toggle<CR>", { desc = "Turn Markdown rendering on and off"})
 
--- Folds
-vim.keymap.set("n", "<leader>a", "za")
-vim.keymap.set("n", "<leader>o", "zR")
-vim.keymap.set("n", "<leader>c", "zM")
+-- Folds --
+vim.keymap.set("n", "<leader>a", "za", { desc = "Toggle fold under Line"})
+vim.keymap.set("n", "<leader>o", "zR", { desc = "Open all folds"})
+vim.keymap.set("n", "<leader>c", "zM", { desc = "Close all folds"})
+
+-- Sessions --
+vim.keymap.set("n", "<leader>s", ":mksession! ~/.local/state/nvim/sessions/session.vim<CR>")
+vim.keymap.set("n", "<leader>S", ":source ~/.local/state/nvim/sessions/session.vim<CR>")
 
 -- Special Bindings --
 vim.keymap.set("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
