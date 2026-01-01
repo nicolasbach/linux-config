@@ -170,15 +170,16 @@ require("lazy").setup({
 -- Bufferline --
 require("bufferline").setup{
     options = {
+        hover = {
+            enabled = false
+        },
         indicator = {
             style = "underline"
         },
+        numbers = "buffer_id",
         separator_style = "thick",
         show_buffer_close_icons = false,
         show_close_icons = false,
-        hover = {
-            enabled = false
-        }
     }
 }
 
@@ -305,5 +306,5 @@ vim.keymap.set("n", "<leader>c", "zM")
 -- Special Bindings --
 vim.keymap.set("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "map esc in terminal mode"}) -- makes it easier to get to normal mode in the terminal (for example for yanking)
-vim.keymap.set("n", "<leader>yy", [["+yy]], { desc = "Copy line to system clipboard" })
+vim.keymap.set("n", "<leader>yy", [["+yy]])
 
