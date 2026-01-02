@@ -55,96 +55,84 @@ vim.opt.foldenable = false
 ---------------------
 --- Setup Plugins ---
 ---------------------
--- Plugin List:
--- akinsho/bufferline.nvim
--- folke/tokyonight.nvim                # colorscheme
--- kylechui/nvim-surround               # surround motions
--- lewis6991/gitsigns.nvim              # Git plugin
--- neovim/nvim-lspconfig                # lspconfig for autocompletion
--- nvim-lualine/lualine.nvim            # lualine as an equivalent for airline
--- nvim-tree/nvim-tree.lua              # filebrowser
--- nvim-tree/nvim-web-devicons          # nerdfonts and icons for nvim-tree
--- nvim-treesitter/nvim-treesitter      # Treesitter
--- nvim-telescope/telescope.nvim        # fuzzy finding
--- MeanderingProgrammer/render-markdown.nvim
--- saghen/blink.cmp                     # lsp client
--- windwp/nvim-autopairs                # auto pairs
 require("lazy").setup({
     spec = {
         {
-            "akinsho/bufferline.nvim",
+            "akinsho/bufferline.nvim",                              -- Bufferline for nice ui
             version = "*",
             dependencies = { "nvim-tree/nvim-web-devicons" }
         },
         {
-            "windwp/nvim-autopairs",
+            "windwp/nvim-autopairs",                                -- set matching brackts automatically
             event = "InsertEnter",
             config = true
         },
         {
-            "kylechui/nvim-surround",
+            "kylechui/nvim-surround",                               -- change surrounding characters
             event = "VeryLazy",
             config = function()
                 require("nvim-surround").setup({})
             end
         },
         {
-            "folke/tokyonight.nvim",
+            "folke/tokyonight.nvim",                                -- Theme
             lazy = false,
             priority = 1000,
             opts = {}
         },
         {
-            "lewis6991/gitsigns.nvim"
+            "lewis6991/gitsigns.nvim"                               -- Git stuff, primarily for blame
         },
         {
-            "nvim-lualine/lualine.nvim",
+            "nvim-lualine/lualine.nvim",                            -- like vim airline
             dependencies = { "nvim-tree/nvim-web-devicons"}
         },
         {
-            "nvim-tree/nvim-tree.lua"
+            "nvim-tree/nvim-tree.lua"                               -- File browser
         },
         {
-            "nvim-tree/nvim-web-devicons",
+            "nvim-tree/nvim-web-devicons",                          -- Icons and fonts
         },
         {
-            "nvim-treesitter/nvim-treesitter",
+            "nvim-treesitter/nvim-treesitter",                      -- treesitter
             lazy = false,
             build = ":TSUpdate"
         },
         {
-            "nvim-telescope/telescope.nvim", tag = "v0.2.0",
+            "nvim-telescope/telescope.nvim", tag = "v0.2.0",        -- Telescope fuzzy finding
             dependencies = { "nvim-lua/plenary.nvim" }
         },
         {
-            "MeanderingProgrammer/render-markdown.nvim",
+            "MeanderingProgrammer/render-markdown.nvim",            -- Markdown rendering
             dependencies =  { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
             ---@module "render-markdown"
             ---@type render.md.UserConfig
             opts = {}
         },
         {
-            "saghen/blink.cmp",
-            build = "cargo +nightly build --release",
-            dependencies = { "rafamadriz/friendly-snippets" },
-            opts = {
-                keymap = {
-                    preset = "default",
-                    ["<Tab>"] = { "select_next", "fallback"}, -- use tab to select items
-                    ["<S-Tab>"] = {"select_prev", "fallback"}, -- go backwards at the selection via Shift Tab
-                    ["<CR>"] = { "select_and_accept", "fallback" }, -- select item with Enter
-                },
-                completion = { documentation = { auto_show = false } },
-                sources = {
-                    default = { "lsp", "path", "snippets", "buffer" },
-                },
-                fuzzy = { implementation = "prefer_rust_with_warning" }
-            },
-            opts_extend = { "sources.default" }
+            "neovim/nvim-lspconfig"                                 -- LSP
         },
         {
-            "neovim/nvim-lspconfig"
+            "hrsh7th/cmp-nvim-lsp"
         },
+        {
+            "hrsh7th/cmp-buffer"
+        },
+        {
+            "hrsh7th/cmp-path"
+        },
+        {
+            "hrsh7th/cmp-cmdline"
+        },
+        {
+            "hrsh7th/nvim-cmp"
+        },
+        {
+            "L3MON4D3/LuaSnip"
+        },
+        {
+            "saadparwaiz1/cmp_luasnip"
+        }
     },
     install = { colorscheme = { "tokyonight" } },
 })
@@ -162,7 +150,7 @@ require("bufferline").setup{
         indicator = {
             style = "underline"
         },
-        numbers = "buffer_id",
+        numbers = "ordinal",
         separator_style = "thick",
         show_buffer_close_icons = false,
         show_close_icons = false,
@@ -215,9 +203,30 @@ require("nvim-tree").setup({
 -----------------
 --- LSP Setup ---
 -----------------
--- capabilities for lsp (defaults in this case) --
-local capabilities = require('blink.cmp').get_lsp_capabilities()
-local capabilities = require('blink.cmp').get_lsp_capabilities()
+local cmp = require("cmp")
+cmp.setup({
+    snippet = {
+        expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+        end,
+    },
+    mapping = cmp.mapping.preset.insert({
+        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-e>"] = cmp.mapping.abort(),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        ["<TAB>"] = cmp.mapping.select_next_item(),
+        ["<S-TAB>"] = cmp.mapping.select_prev_item(),
+    }),
+    sources = cmp.config.sources({
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+        { name = "buffer" },
+    })
+})
+
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Rust Autocompletion --
 vim.lsp.config('rust_analyzer', {
@@ -236,6 +245,13 @@ vim.lsp.config('html', {
     capabilities = capabilities,
 })
 vim.lsp.enable('html')
+
+-- Lua Auto Completion --
+vim.lsp.config('lua_ls', {
+    capabilities = capabilities,
+})
+vim.lsp.enable('lua_ls')
+
 -- Necessary for error messages --
 vim.diagnostic.config({
     virtual_text = true,
