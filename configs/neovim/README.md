@@ -15,7 +15,6 @@
 - nvim-treesitter/nvim-treesitter      # Treesitter
 - nvim-telescope/telescope.nvim        # fuzzy finding
 - MeanderingProgrammer/render-markdown.nvim
-- saghen/blink.cmp                     # lsp client
 - windwp/nvim-autopairs                # auto pairs
 
 ### Needed packages
@@ -24,7 +23,6 @@ Needs the following packages:
 - rustup (Blink.cmp and Telescope)
 - cargo (Telescope)
 - ripgrep (for Telescope)
-- luarocks
 - rust-analyzer (`rustup component add rust-analyzer` or Package Manager)
 
 Nerdfont is required
@@ -38,12 +36,14 @@ Nerdfont is required
 2. Set the NerdFont for your Terminal-Emulator e.g. in alacritty under [font] `normal = { family = "FiraCode Nerd Font", style = "Regular" }`]
 3. Install the necessary packages
 
-```
-sudo pacman -S rustup cargo ripgrep luarocks 
-# Optional
-rustup component add rust-analyzer 
+**Caution**: Don't open neovim, untio everything else is installed
 
-pacman -S neovim
+**Caution 2**: Make sure you use the latest neovim version... no problem on Arch/Rolling Release, otherwise use the snap/flatpak version
+
+```
+sudo pacman -S rustup cargo ripgrep neovim
+rustup default stable
+rustup component add rust-analyzer 
 ```
 
 ## Keys and Keybindings
@@ -126,7 +126,7 @@ Stuff
 | Leader + n | disable highlighting after search (:noh) |
 | Leader + w | Save file without quitting |
 | Leader + W | Show trailing whitespaces | 
-| Leader + k | toggle nvim-tree |
+| Leader + e | toggle nvim-tree |
 | Leader + t | Terminal | 
 | Leader + gb | Git blame |
 | Leader + gd | Git diff |
