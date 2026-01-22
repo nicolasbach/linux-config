@@ -1,0 +1,12 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = linux
+Target = intel-ucode
+Target = amd-ucode
+
+[Action]
+Description = Copy Kernel to ESP and sign it
+When = PostTransaction
+Exec = /usr/local/bin/secureboot-update.sh
