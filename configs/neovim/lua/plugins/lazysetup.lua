@@ -50,6 +50,13 @@ require("lazy").setup({
             "lewis6991/gitsigns.nvim"                               -- Git stuff, primarily for blame
         },
         {
+            "nvim-java/nvim-java",
+            config = function()
+                require('java').setup()
+                vim.lsp.enable('jdtls')
+            end,
+        },
+        {
             "nvim-lualine/lualine.nvim",                            -- like vim airline
             dependencies = { "nvim-tree/nvim-web-devicons"}
         },

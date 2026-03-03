@@ -34,6 +34,10 @@ vim.keymap.set("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Telescop
 -- Markdown --
 vim.keymap.set("n", "<leader>rm", ":RenderMarkdown toggle<CR>", { desc = "Turn Markdown rendering on and off"})
 
+-- Java --
+vim.keymap.set("n", "<leader>jr", ":JavaRunnerRunMain<CR>", { desc = "Run main method"})
+vim.keymap.set("n", "<leader>js", ":JavaRunnerStopMain<CR>", { desc = "Run main method"})
+
 -- Folds --
 vim.keymap.set("n", "<leader>a", "za", { desc = "Toggle fold under Line"})
 vim.keymap.set("n", "<leader>o", "zR", { desc = "Open all folds"})
