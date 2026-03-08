@@ -15,6 +15,8 @@ vim.opt.swapfile = false
 vim.opt.signcolumn = 'yes:1'
 vim.opt.undodir = os.getenv('HOME') .. '/.config/nvim/undodir'
 vim.opt.undofile = true                                             -- use undofile
+vim.opt.list = true
+vim.opt.listchars = { trail = "*", tab = ">> " }
 
 -- Folding --
 vim.opt.foldmethod = "expr"

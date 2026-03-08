@@ -5,6 +5,7 @@
 -- Bufferline --
 require("bufferline").setup{
     options = {
+        diagnostics = "nvim_lsp",
         hover = {
             enabled = false
         },
@@ -28,9 +29,16 @@ require("gitsigns").setup {
 }
 
 -- Lualine --
-require('lualine').get_config()
 require('lualine').setup {
     options = { theme = 'codedark' },
+    sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_c = {'filename'},
+        lualine_x = {'encoding', 'filesize', 'fileformat', 'filetype'},
+        lualine_y = {'lsp_status'},
+        lualine_z = {'progress', 'location'}
+    }
 }
 
 -- NVIM Tree --

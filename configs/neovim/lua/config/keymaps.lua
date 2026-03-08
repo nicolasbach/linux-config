@@ -1,7 +1,6 @@
 -- General Settings
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
 vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
-vim.keymap.set("n", "<leader>p", ":pc<CR>", { desc = "get help out of the way"}) -- maybe YCM specific and not necessary anymore
 vim.keymap.set("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
 vim.keymap.set("v", ">", ">gv", { desc = "reselect in visual mode for right indentation"}) -- reselect previous selection in visual mode for indentation
 vim.keymap.set("v", "<", "<gv", { desc = "reselect in visual mode for left indentation"}) -- reselect previous selection in visual mode for indentation
@@ -10,15 +9,9 @@ vim.keymap.set("v", "<", "<gv", { desc = "reselect in visual mode for left inden
 vim.keymap.set("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
 vim.keymap.set("n", "<leader>B", ":bp<CR>", { desc = "previous buffer"})
 vim.keymap.set("n", "<leader>db", ":bd<CR>", { desc = "delete current buffer"})
-vim.keymap.set("n", "<leader>1", ":BufferLineGoToBuffer 1<CR>", { desc = "Go to buffer 1"})
-vim.keymap.set("n", "<leader>2", ":BufferLineGoToBuffer 2<CR>", { desc = "Go to buffer 2"})
-vim.keymap.set("n", "<leader>3", ":BufferLineGoToBuffer 3<CR>", { desc = "Go to buffer 3"})
-vim.keymap.set("n", "<leader>4", ":BufferLineGoToBuffer 4<CR>", { desc = "Go to buffer 4"})
-vim.keymap.set("n", "<leader>5", ":BufferLineGoToBuffer 5<CR>", { desc = "Go to buffer 5"})
-vim.keymap.set("n", "<leader>6", ":BufferLineGoToBuffer 6<CR>", { desc = "Go to buffer 6"})
-vim.keymap.set("n", "<leader>7", ":BufferLineGoToBuffer 7<CR>", { desc = "Go to buffer 7"})
-vim.keymap.set("n", "<leader>8", ":BufferLineGoToBuffer 8<CR>", { desc = "Go to buffer 8"})
-vim.keymap.set("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", { desc = "Go to buffer 9"})
+for i = 1, 9 do
+    vim.keymap.set("n", string.format("<leader>%d", i), string.format("<cmd>BufferLineGoToBuffer%d<CR>", i), { desc = "Go to buffer " .. i })
+end
 
 -- Git bindings --
 vim.keymap.set("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})

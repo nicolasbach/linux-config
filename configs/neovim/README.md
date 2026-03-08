@@ -3,18 +3,15 @@
 ## Neovim
 
 ### Plugins
-- akinsho/bufferline.nvim
-- folke/tokyonight.nvim                # colorscheme
+- akinsho/bufferline.nvim              # Shows buffers like tabs
 - kylechui/nvim-surround               # surround motions
 - lewis6991/gitsigns.nvim              # Git plugin
 - neovim/nvim-lspconfig                # lspconfig for autocompletion
-- nvimdev/dashboard-nvim               # Dashboard like vim-startify
 - nvim-lualine/lualine.nvim            # lualine as an equivalent for airline
 - nvim-tree/nvim-tree.lua              # filebrowser
 - nvim-tree/nvim-web-devicons          # nerdfonts and icons for nvim-tree
 - nvim-treesitter/nvim-treesitter      # Treesitter
 - nvim-telescope/telescope.nvim        # fuzzy finding
-- MeanderingProgrammer/render-markdown.nvim
 - windwp/nvim-autopairs                # auto pairs
 
 ### Needed packages
@@ -24,6 +21,11 @@ Needs the following packages:
 - cargo (Telescope)
 - ripgrep (for Telescope)
 - rust-analyzer (`rustup component add rust-analyzer` or Package Manager)
+- vscode-html-language-server
+- vscode-json-language-server
+- bash-language-server
+- yaml-language-server
+- pyright
 
 Nerdfont is required
 - Set it in Terminal Emulator like Alacritty or Terminal on Windows
@@ -41,7 +43,7 @@ Nerdfont is required
 **Caution 2**: Make sure you use the latest neovim version... no problem on Arch/Rolling Release, otherwise use the snap/flatpak version
 
 ```
-sudo pacman -S rustup cargo ripgrep neovim
+sudo pacman -S rustup cargo ripgrep neovim vscode-html-language-server vscode-json-language-server bash-language-server pyright yaml-language-server
 rustup default stable
 rustup component add rust-analyzer 
 ```

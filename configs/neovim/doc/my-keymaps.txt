@@ -8,10 +8,27 @@ CONTENT
 1. Basic Stuff
 
 
+-------------------------------------------------------
+Motions
+e - jump forward to end of word
+E - jump forward to end of word (can contain punctuation)
+b - jump backwards to start of word
+B - jump backwards to start of word (can contain punctuation)
+w - jump forward to start of word
+W - jump forward to start of word (can contain punctuation)
+. - repeat last command
+H - top of screen
+M - middle of screen
+L - bottom of screen
+
+
+-------------------------------------------------------
+Editing
 d2w - delete next 2 words
 d2b - delete last 2 words
 d$ - delete until EOL
 C - Delete until EOL and go to insert mode
+I - Insert at Beginning of line
 
 -------------------------------------------------------
 Visual Mode

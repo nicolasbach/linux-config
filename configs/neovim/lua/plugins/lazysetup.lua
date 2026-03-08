@@ -88,6 +88,6 @@ require("lazy").setup({
             "saadparwaiz1/cmp_luasnip"
         }
     },
-    install = { colorscheme = { "sorbet" } },
+    -- install = { colorscheme = { "sorbet" } },
     checker = { enabled = true },
 })
