@@ -41,20 +41,7 @@ require("lazy").setup({
             end
         },
         {
-            "folke/tokyonight.nvim",                                -- Theme
-            lazy = false,
-            priority = 1000,
-            opts = {}
-        },
-        {
             "lewis6991/gitsigns.nvim"                               -- Git stuff, primarily for blame
-        },
-        {
-            "nvim-java/nvim-java",
-            config = function()
-                require('java').setup()
-                vim.lsp.enable('jdtls')
-            end,
         },
         {
             "nvim-lualine/lualine.nvim",                            -- like vim airline
@@ -75,13 +62,6 @@ require("lazy").setup({
             "nvim-telescope/telescope.nvim",                        --  fuzzy finding
             tag = "v0.2.1",
             dependencies = { "nvim-lua/plenary.nvim" }
-        },
-        {
-            "MeanderingProgrammer/render-markdown.nvim",            -- Markdown rendering
-            dependencies =  { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
-            ---@module "render-markdown"
-            ---@type render.md.UserConfig
-            opts = {}
         },
         {
             "neovim/nvim-lspconfig"                                 -- LSP
@@ -108,5 +88,6 @@ require("lazy").setup({
             "saadparwaiz1/cmp_luasnip"
         }
     },
-    install = { colorscheme = { "tokyonight" } },
+    install = { colorscheme = { "sorbet" } },
+    checker = { enabled = true },
 })

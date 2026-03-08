@@ -18,10 +18,6 @@ require("bufferline").setup{
     }
 }
 
--- Colorscheme --
-vim.cmd[[colorscheme tokyonight]]
-
-
 --- Git ---
 require("gitsigns").setup {
     signcolumn = false,
@@ -34,16 +30,8 @@ require("gitsigns").setup {
 -- Lualine --
 require('lualine').get_config()
 require('lualine').setup {
-    options = { theme = 'tokyonight' },
+    options = { theme = 'codedark' },
 }
-
--- Markdown --
-require("render-markdown").setup({
-    enabled = false,
-    completions = {
-        lsp = { enabled = true }
-    },
-})
 
 -- NVIM Tree --
 vim.g.loaded_netrw = 1

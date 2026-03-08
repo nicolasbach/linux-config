@@ -1,0 +1,86 @@
+*my-keymaps.txt*    Personal keymaps and notes
+
+====================================================================
+CONTENT
+    1. Basic Stuff
+    2. Custom Keybindings and Plugins
+====================================================================
+1. Basic Stuff
+
+
+d2w - delete next 2 words
+d2b - delete last 2 words
+d$ - delete until EOL
+C - Delete until EOL and go to insert mode
+
+-------------------------------------------------------
+Visual Mode
+v - enter char-wise visual mode
+V - line-wise visual mode
+Ctrl + v - block-wise visual mode
+j/k - select whole lines
+> move indentation to the right
+<< move indentation to the left
+
+-------------------------------------------------------
+Buffers
+:bn - Next Buffer
+:bp - Previous Buffer
+:bd - Delete Current Buffer
+:bd! - Force Delete Current Buffer
+
+-------------------------------------------------------
+Registers
+"2p - Yank text from second register
+
+-------------------------------------------------------
+Tabs
+:tabnew foo.txt
+gt - next tab
+gT - Previous tab
+
+-------------------------------------------------------
+Recordings
+qr - Start Recording for Register r
+q - Stop Recording
+@r - do recorded actions
+
+-------------------------------------------------------
+Stuff
+"+yy - copy to system clipboard (maybe * instead of +)
+:%sort - sort whole file, also possible by selection in visual mode
+:%sort! - reverse sort
+:%s/Pattern/pattern/g - search and replace
+
+====================================================================
+2. Custom Keybindings and Plugins
+
+Leader + n -> disable highlighting after search (:noh)
+Leader + w -> Save file without quitting
+Leader + W -> Show trailing whitespaces
+Leader + e -> toggle nvim-tree
+Leader + t -> Terminal
+-------------------------------------------------------
+Leader + gb -> Git blame
+Leader + gd -> Git diff
+Leader + gts -> Git toggle signs
+
+Leader + ff -> Fuzzy finder
+Leader + fg -> Fuzzy finder  live grep
+Leader + b -> Next Buffer
+Leader + B -> Previous Buffer
+Leader + db -> Delete current Buffer
+Leader + [1-9] -> Go to buffer number [1-9]
+ysiw" | Surround -> Add " around the current word
+ds" | Surround -> Delete " around the current word
+cs'" | Surround -> Change ' to  " around the current word
+
+-------------------------------------------------------
+Folding
+Leader + a | Toggle fold under cursor
+Leader + o | Open all folds
+Leader + c | Close all folds
+
+
+====================================================================
+vim:tw=78:ft=help:norl:
