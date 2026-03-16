@@ -64,6 +64,11 @@ vim.lsp.config('bashls', {
 -- Lua Auto Completion --
 vim.lsp.config('lua_ls', {
     capabilities = capabilities,
+    settings = {
+        Lua = {
+            diagnostics = { globals = { "vim" }}
+        }
+    }
 })
 
 vim.lsp.enable('bashls')

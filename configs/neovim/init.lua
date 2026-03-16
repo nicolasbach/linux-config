@@ -7,8 +7,7 @@
 -------------------------------------
 
 -- General
-vim.g.mapleader = "ö"
-vim.g.maplocalleader = "\\"
+vim.g.mapleader = ","
 require("config.options")
 
 -- Plugins

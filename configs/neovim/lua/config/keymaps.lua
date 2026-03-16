@@ -1,22 +1,15 @@
 -- General Settings
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "toggle neovim"})
 vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "save file without quitting"})
-vim.keymap.set("n", "<leader>n", ":noh<CR>", { desc = "execute noh to remove highlighting"})
-vim.keymap.set("v", ">", ">gv", { desc = "reselect in visual mode for right indentation"}) -- reselect previous selection in visual mode for indentation
-vim.keymap.set("v", "<", "<gv", { desc = "reselect in visual mode for left indentation"}) -- reselect previous selection in visual mode for indentation
+vim.keymap.set("n", "ö", ":", { desc = "map ö to command mode"})
+vim.keymap.set("v", ">", ">gv", { desc = "reselect in visual mode for right indentation"})
+vim.keymap.set("v", "<", "<gv", { desc = "reselect in visual mode for left indentation"})
 
 -- Buffer related bindings --
-vim.keymap.set("n", "<leader>b", ":bn<CR>", { desc = "next buffer"})
-vim.keymap.set("n", "<leader>B", ":bp<CR>", { desc = "previous buffer"})
 vim.keymap.set("n", "<leader>db", ":bd<CR>", { desc = "delete current buffer"})
 for i = 1, 9 do
     vim.keymap.set("n", string.format("<leader>%d", i), string.format("<cmd>BufferLineGoToBuffer%d<CR>", i), { desc = "Go to buffer " .. i })
 end
-
--- Git bindings --
-vim.keymap.set("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Show git blame for current line"})
-vim.keymap.set("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Show current dif"})
-vim.keymap.set("n", "<leader>gts", ":Gitsigns toggle_signs<CR>", { desc = "toggle signs on the side"})
 
 -- Fuzzy finding with Telescope --
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Telescope find files" })
@@ -27,14 +20,9 @@ vim.keymap.set("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Telescop
 -- Markdown --
 vim.keymap.set("n", "<leader>rm", ":RenderMarkdown toggle<CR>", { desc = "Turn Markdown rendering on and off"})
 
--- Folds --
-vim.keymap.set("n", "<leader>a", "za", { desc = "Toggle fold under Line"})
-vim.keymap.set("n", "<leader>o", "zR", { desc = "Open all folds"})
-vim.keymap.set("n", "<leader>c", "zM", { desc = "Close all folds"})
-
 -- Sessions --
-vim.keymap.set("n", "<leader>s", ":mksession! ~/.local/state/nvim/sessions/session.vim<CR>")
-vim.keymap.set("n", "<leader>S", ":source ~/.local/state/nvim/sessions/session.vim<CR>")
+vim.keymap.set("n", "<leader>ss", ":mksession! ~/.local/state/nvim/sessions/session.vim<CR>")
+vim.keymap.set("n", "<leader>sl", ":source ~/.local/state/nvim/sessions/session.vim<CR>")
 
 -- Special Bindings --
 vim.keymap.set("n", "<leader>W", [[/\s\+$<CR>]], { desc = "Show trailing whitespaces"}) -- Shows trailing whitespaces (happens a lot)

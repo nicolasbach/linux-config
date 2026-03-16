@@ -41,7 +41,7 @@ require("lazy").setup({
             end
         },
         {
-            "lewis6991/gitsigns.nvim"                               -- Git stuff, primarily for blame
+            "tpope/vim-fugitive"                                    -- Git integration
         },
         {
             "nvim-lualine/lualine.nvim",                            -- like vim airline
@@ -67,7 +67,7 @@ require("lazy").setup({
             "neovim/nvim-lspconfig"                                 -- LSP
         },
         {
-            "hrsh7th/cmp-nvim-lsp"
+            "hrsh7th/cmp-nvim-lsp"                                  -- Auto completion
         },
         {
             "hrsh7th/cmp-buffer"

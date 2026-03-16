@@ -72,20 +72,13 @@ Stuff
 ====================================================================
 2. Custom Keybindings and Plugins
 
-Leader + n -> disable highlighting after search (:noh)
 Leader + w -> Save file without quitting
 Leader + W -> Show trailing whitespaces
 Leader + e -> toggle nvim-tree
 Leader + t -> Terminal
 -------------------------------------------------------
-Leader + gb -> Git blame
-Leader + gd -> Git diff
-Leader + gts -> Git toggle signs
-
 Leader + ff -> Fuzzy finder
 Leader + fg -> Fuzzy finder  live grep
-Leader + b -> Next Buffer
-Leader + B -> Previous Buffer
 Leader + db -> Delete current Buffer
 Leader + [1-9] -> Go to buffer number [1-9]
 ysiw" | Surround -> Add " around the current word
@@ -94,9 +87,9 @@ cs'" | Surround -> Change ' to  " around the current word
 
 -------------------------------------------------------
 Folding
-Leader + a | Toggle fold under cursor
-Leader + o | Open all folds
-Leader + c | Close all folds
+za | Toggle fold under cursor
+zR | Open all folds
+zM | Close all folds
 
 
 ====================================================================

@@ -19,15 +19,6 @@ require("bufferline").setup{
     }
 }
 
---- Git ---
-require("gitsigns").setup {
-    signcolumn = false,
-    current_line_blame = false,
-    current_line_blame_opts = {
-        virt_text_pos = "eol",
-    }
-}
-
 -- Lualine --
 require('lualine').setup {
     options = { theme = 'codedark' },
