@@ -32,6 +32,10 @@ require('lualine').setup {
     }
 }
 
+-- Snippets --
+require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip").filetype_extend("python", { "pydoc" })
+
 -- NVIM Tree --
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
