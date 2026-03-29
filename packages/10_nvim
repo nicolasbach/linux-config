@@ -1,5 +1,8 @@
+bash-language-server
+lua-language-server
+luarocks
 pyright
+ripgrep
 rust
 rustup
-luarocks
-ripgrep
+yaml-language-server
