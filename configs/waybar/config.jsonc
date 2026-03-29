@@ -4,18 +4,15 @@
     "spacing": 2, // Gaps between modules (4px)
     "modules-left": [
         "hyprland/workspaces",
-        "hyprland/mode",
         "custom/spotify"
     ],
     "modules-center": [
         "hyprland/window"
     ],
     "modules-right": [
-        "load",
-        "cpu",
-        "memory",
-        "network",
         "pulseaudio",
+        "group/hardware",
+        "network",
         "clock"
     ],
     // Modules configuration
@@ -28,20 +25,28 @@
         "max-length": 50,
         "separate-outputs": true
     },
+    "group/hardware": {
+        "orientation":"horizontal",
+        "modules": [
+            "load",
+            "cpu",
+            "memory"
+        ]
+    },
     "cpu": {
         "format": "{usage}%  ",
         "tooltip": false
     },
     "load": {
         "interval": 10,
-        "format": "{load1} - {load5} - {load15}"
+        "format": "{load1}"
     },
     "memory": {
         "format": "{used}/{total}  GiB   "
     },
     "clock": {
         "interval": 1,
-        "format": "  <span font='FiraCode Nerd Font'>{:%H:%M:%S | %d-%m-%Y}</span>  ",
+        "format": "  <span font='FiraCode Nerd Font'>{:%H:%M:%S | %d-%m-%Y}</span>   ",
         "tooltip": true,
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
