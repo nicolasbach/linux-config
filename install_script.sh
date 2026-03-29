@@ -3,52 +3,70 @@
 loginuser=$(logname)
 gui_installed=false
 
+# Declare arrays
+declare -a cmd_packages
+declare -a desktop_packages
+declare -a flatpaks
+declare -a nvim_packages
+declare -a wayland_packages
+declare -a wm_packages
+declare -a x11_packages
+
+# read package lists into arrays
+readarray -t cmd_packages < packages/01_cmd_basic
+readarray -t desktop_packages < packages/05_desktop
+readarray -t flatpaks < packages/05_flatpaks
+readarray -t nvim_packages < packages/10_nvim
+readarray -t wayland_packages < packages/03_wayland
+readarray -t wm_packages < packages/02_wm_basic
+readarray -t x11_packages < packages/03_x11
+
+
+function install_packages {
+    declare -a packages
+    packages=("$@")
+    for package in "${packages[@]}"; do
+        if ! pacman -Qi $package &> /dev/null; then
+            pacman -S --noconfirm $package
+        else
+            echo "$package already installed"
+        fi
+    done
+}
+
 
 function install_gui {
-    readarray -t desktop_programs < packages/desktop_programs
-    readarray -t vim_packages < packages/vim_packages
-    readarray -t flatpaks < packages/flatpaks
+    install_packages "${wm_packges[@]}"
+    echo "[ 1 ] - Hyprland"
+    echo "[ 2 ] - i3"
 
-    read -p "Install hyprland? (y/n): " opt
-    if [[ $opt == "y"]]; then
-        # Install necessary packages for hyprland
-        readarray -t hyprland_packages < packages/hyprland_packages
-        echo "Installing hyprland packages"
-        for wmpackage in "${hyprland_packages[@]}"; do
-            if ! pacman -Qi $wmpackage &> /dev/null; then
-                pacman -S --noconfirm $wmpackage
-            else
-                echo "$wmpackage already installed"
-            fi
-        done
-        # Copy to hyprland configs to config dir
-        if diff -q configs/hyprland/hyprland.conf ~/.config/hypr/hyprland.conf > /dev/null; then
-            echo "Config already in place"
-        else
-            mkdir ~/.config/hypr
+    read -p "choose wm: " opt
+
+    case $opt in
+        1)
+            install_packages "${wayland_packages[@]}"
+            # Copy to hyprland configs to config dir
+            mkdir ~/.config/hypr ~/.config/waybar
             cp -r configs/hyprland/* ~/.config/hypr/
             echo "Copied hyprland config"
-        fi
-    else
-        # Install necessary packages for i3
-        readarray -t i3_packages < packages/i3_packages
-        echo "Installing window manager packages"
-        for wmpackage in "${i3_packages_manager[@]}"; do
-            if ! pacman -Qi $wmpackage &> /dev/null; then
-                pacman -S --noconfirm $wmpackage
-            else
-                echo "$wmpackage already installed"
-            fi
-        done
+            cp -r configs/waybar/* ~/.config/waybar/
+            echo "Copied waybar config"
+            ;;
+        2)
+            # Install necessary packages for i3
+            install_packages "${x11_packages[@]}"
 
-        # Copy i3 config to config dir
-        if diff -q configs/i3_config ~/.config/i3/config > /dev/null; then
-            echo "Config already in place"
-        else
+            # Copy i3 config to config dir
+            mkdir -p ~/.config/i3
             cp configs/i3_config ~/.config/i3/config
+            mkdir -p ~/.config/picom
+            cp configs/picom.conf ~/.config/picom
             echo "Copied i3 config"
-        fi
-    fi
+            ;;
+        *)
+            echo "unknown option"
+            ;;
+    esac
 
     # sddm config
     sddm_enabled=$(systemctl is-enabled sddm)
@@ -58,6 +76,13 @@ function install_gui {
     else
         echo "sddm already enabled"
     fi
+
+    # Install desktop applications
+    install_packages "${desktop_packages[@]}"
+    for fp in "${flatpaks[@]}"
+    do
+        flatpak install $fp -y
+    done
 
     # Nerd Fonts for alacritty/vim config
     if diff <(unzip -l stuff/FiraCode.zip | grep ttf | awk '{print $4}' | sort) <(ls -la ~/.local/share/fonts/ | grep -E "FiraCode.+ttf" | awk '{print $9}' | sort) > /dev/null; then
@@ -74,30 +99,11 @@ function install_gui {
     fi
 }
 
-function get_packages {
-    readarray -t essentials < packages/essentials
-    readarray -t tools < packages/tools
-    readarray -t development < packages/development
-
+function configure_packages {
     echo "Installing essential packages"
-    for essential in "${essentials[@]}"; do
-        if ! pacman -Qi $essential &> /dev/null; then
-            pacman -S --noconfirm $essential
-        else
-            echo "$essential already installed"
-        fi
-    done
+    install_packages "${cmd_packages[@]}"
 
-    echo "Installing tools"
-    for tool in "${tools[@]}"; do
-        if ! pacman -Qi $tool&> /dev/null; then
-            pacman -S --noconfirm tool$
-        else
-            echo "$tool already installed"
-        fi
-    done
-
-    read -p "Install window manager? (y/n): " opt
+    read -p "Install gui? (y/n): " opt
     if [[ $opt == "y" ]] || [[ $opt == "Y" ]]; then
         install_gui
         gui_installed=true
@@ -106,43 +112,29 @@ function get_packages {
     fi
 }
 
-
 function configure_git {
-    if diff -q configs/gitconfig ~/.gitconfig > /dev/null; then
-        echo "Git config already exists"
-    else
-        cp configs/gitconfig ~/.gitconfig
-        echo "Copied gitconfig"
-    fi
+    cp configs/gitconfig ~/.gitconfig
 }
 
-function configure_vim {
-    # vim config
-    PLUG_PATH="~/.vim/autoload/plug.vim"
-    if [ ! -f $PLUG_PATH ]; then
-        echo "Installing vim-plug..."
-        curl -fLo "$PLUG_PATH" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    fi
-    echo "Installing vim plugins"
-    vim -es -u "~/.vimrc" +PlugInstall +qall
-    cd ~/.vim/plugged/YouCompleteMe/
-    python3 install.py --clangd-completer --java-completer
-    cd ~
-}
-
+# Note: "configure_vim" was removed because I use nvim, vimrc is still in this repo
 function configure_nvim {
     mkdir -p ~/.config/nvim
-    cp configs/neovim/nvim.lua ~/.config/nvim/init.lua
-    cd ~
+    cp -r configs/neovim/* ~/.config/nvim/
 }
 
 function configure_alacritty {
-    if diff -q configs/alacritty.toml ~/.config/alacritty.toml > /dev/null; then
-        echo "Alacritty config already in place"
-    else
-        cp configs/alacritty.toml ~/.config/alacritty.toml
-        echo "Alacritty config copied"
-    fi
+    mkdir -p ~/.config/alacritty
+    cp configs/alacritty.toml ~/.config/alacritty.toml
+}
+
+function configure_dunst {
+    mkdir -p ~/.config/dunst
+    cp configs/dunstrc ~/.config/dunst/dunstrc
+}
+
+function configure_conky {
+    mkdir -p ~/.config/conky
+    cp configs/conky/conky.conf ~/.config/conky/conky.conf
 }
 
 
@@ -153,21 +145,18 @@ function configure_alacritty {
 if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
     echo "Arch Linux detected"
     sudo pacman -Syu
-    get_packages
+    configure_packages
     configure_git
+    cp configs/bashrc ~/.bashrc
     if [[ $gui_installed = true ]]; then
-        echo "Configuring editor..."
-        read -p "Do you want to configure neovim? Falls back to vim! (y/n): " opt
-        if [[ $opt == "y" ]] || [[ $opt == "Y" ]]; then
-            configure_nvim
-            echo "Configured neovim"
-        else
-            configure_vim
-            echo "Configured vim"
-        fi
-        echo "Configuring alacritty"
+        echo "Configuring alacritty..."
         configure_alacritty
         echo "Configured alacritty"
+        echo "Configuring neovim..."
+        configure_nvim
+        echo "Configured neovim"
+        configure_conky
+        configure_dunst
     else
         echo "No gui installed so no extra configs necessary"
     fi

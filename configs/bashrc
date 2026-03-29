@@ -28,4 +28,4 @@ alias q='exit'
 alias h='history'
 
 PS1='[\u@\h \W]\$ '
-neofetch
+fastfetch

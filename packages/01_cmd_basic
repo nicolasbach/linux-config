@@ -1,9 +1,10 @@
 curl
+fastfetch
 git
 gnupg
 htop
 jq
-neofetch
+nmap
 openssh
 tcpdump
 unzip
