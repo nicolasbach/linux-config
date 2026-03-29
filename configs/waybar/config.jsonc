@@ -1,7 +1,7 @@
 // -*- mode: jsonc -*-
 {
-    "height": 30, // Waybar height (to be removed for auto height)
-    "spacing": 4, // Gaps between modules (4px)
+    "height": 45, // Waybar height (to be removed for auto height)
+    "spacing": 2, // Gaps between modules (4px)
     "modules-left": [
         "hyprland/workspaces",
         "hyprland/mode",
@@ -11,131 +11,79 @@
         "hyprland/window"
     ],
     "modules-right": [
-        "pulseaudio",
-        "network",
+        "load",
         "cpu",
         "memory",
-        "keyboard-state",
-        "sway/language",
-        "battery",
-        "battery#bat2",
-        "clock",
-        "tray",
+        "network",
+        "pulseaudio",
+        "clock"
     ],
     // Modules configuration
     "hyprland/workspaces": {
-        "format": "{name}"
+        "format": "{name}",
+        "active-only": false
     },
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
-    "tray": {
-        // "icon-size": 21,
-        "spacing": 10
-    },
-    "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+    "hyprland/window": {
+        "format": "  {} ",
+        "max-length": 50,
+        "separate-outputs": true
     },
     "cpu": {
-        "format": "{usage}% ",
+        "format": "{usage}%  ",
         "tooltip": false
     },
+    "load": {
+        "interval": 10,
+        "format": "{load1} - {load5} - {load15}"
+    },
     "memory": {
-        "format": "{}% "
+        "format": "{used}/{total}  GiB   "
     },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
-    },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
-    },
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
+    "clock": {
+        "interval": 1,
+        "format": "  <span font='FiraCode Nerd Font'>{:%H:%M:%S | %d-%m-%Y}</span>  ",
+        "tooltip": true,
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#ffead3'><b>{}</b></span>",
+                "days": "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span color='#99ffdd'><b>{}</b></span>",
+                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+                "today": "<span color='#ff6699'><b>{}</b></span>"
+            }
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
-    "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up": "tz_up",
+            "on-scroll-down": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
+        "format-wifi": "{essid} ({signalStrength}%)",
+        "format-ethernet": "   {bandwidthDownBytes}     {bandwidthUpBytes}   ",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-alt": " {ipaddr}/{cidr} "
     },
     "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
+        "format": " {volume}% {icon}  {format_source} ",
+        "format-source": "",
         "format-source-muted": "",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
     },
-    "custom/power": {
-        "format" : "⏻ ",
-		"tooltip": false,
-		"menu": "on-click",
-		"menu-file": "$HOME/.config/waybar/power_menu.xml",
-		"menu-actions": {
-			"shutdown": "shutdown",
-			"reboot": "reboot",
-			"suspend": "systemctl suspend",
-			"hibernate": "systemctl hibernate"
-		}
-    },
     "custom/spotify": {
         "exec": "~/.config/waybar/get_spotify_data",
-        "format": "{icon} {text}",
+        "format": " {icon} {text}",
         "exec-if": "pgrep spotify",
         "interval": 30,
         "on-click": "playerctl -p spotify play-pause"
