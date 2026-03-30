@@ -2,6 +2,7 @@
 
 loginuser=$(logname)
 gui_installed=false
+$REPOPATH="~/.local/share/linux-config"
 
 # Declare arrays
 declare -a cmd_packages
@@ -44,24 +45,32 @@ function install_gui {
 
     case $opt in
         1)
+            # Install packages
             install_packages "${wayland_packages[@]}"
-            # Copy to hyprland configs to config dir
-            mkdir ~/.config/hypr ~/.config/waybar
-            cp -r configs/hyprland/* ~/.config/hypr/
-            echo "Copied hyprland config"
-            cp -r configs/waybar/* ~/.config/waybar/
-            echo "Copied waybar config"
+
+            # Delete existing config dirs (maybe defaults)
+            rm -rf ~/.config/hypr
+            rm -rf ~/.config/waybar
+            rm -rf ~/.config/sway
+
+            # Link configs to config dir
+            ln -s $REPOPATH/configs/hyprland ~/.config/hypr
+            ln -s $REPOPATH/configs/waybar ~/.config/waybar
+            ln -s $REPOPATH/configs/sway ~/.config/sway
+            echo "Linked waybar, hyprland and sway config"
             ;;
         2)
             # Install necessary packages for i3
             install_packages "${x11_packages[@]}"
 
-            # Copy i3 config to config dir
-            mkdir -p ~/.config/i3
-            cp configs/i3_config ~/.config/i3/config
-            mkdir -p ~/.config/picom
-            cp configs/picom.conf ~/.config/picom
-            echo "Copied i3 config"
+            # Delete existing config dirs (maybe defaults)
+            rm -rf ~/.config/i3
+            rm -rf ~/.config/picom
+
+            # Link configs to config dir
+            ln -s $REPOPATH/configs/i3 ~/.config/i3
+            ln -s $REPOPATH/configs/picom ~/.config/picom
+            echo "Linked i3 and picom configs"
             ;;
         *)
             echo "unknown option"
@@ -118,20 +127,35 @@ function configure_git {
 
 # Note: "configure_vim" was removed because I use nvim, vimrc is still in this repo
 function configure_nvim {
-    mkdir -p ~/.config/nvim
-    cp -r configs/neovim/* ~/.config/nvim/
+    # Delete config dir if existing (maybe defaults)
+    rm -rf ~/.config/nvim
+
+    # Link configs to config dir
+    ln -s $REPOPATH/configs/neovim ~/.config/nvim
 }
 
 function configure_alacritty {
-    cp configs/alacritty.toml ~/.config/alacritty.toml
+    # Delete config dir if existing (maybe defaults)
+    rm -rf ~/.config/alacritty
+
+    # Link configs to config dir
+    ln -s $REPOPATH/configs/alacritty ~/.config/alacritty
 }
 
 function configure_dunst {
-    cp -r configs/dunst ~/.config/
+    # Delete config dir if existing (maybe defaults)
+    rm -rf ~/.config/dunst
+
+    # Link configs to config dir
+    ln -s $REPOPATH/configs/dunst ~/.config/dunst
 }
 
 function configure_conky {
-    cp -r configs/conky ~/.config/
+    # Delete config dir if existing (maybe defaults)
+    rm -rf ~/.config/conky
+
+    # Link configs to config dir
+    ln -s $REPOPATH/configs/conky ~/.config/conky
 }
 
 function configure_wallpapers {
