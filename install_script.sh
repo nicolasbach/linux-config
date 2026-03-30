@@ -1,8 +1,8 @@
 #!/bin/bash
 
-loginuser=$(logname)
-gui_installed=false
-$REPOPATH="~/.local/share/linux-config"
+LUSER=$(logname)
+GUIBOOL=false
+REPOPATH="~/.local/share/linux-config"
 
 # Declare arrays
 declare -a cmd_packages
@@ -35,10 +35,19 @@ function install_packages {
     done
 }
 
+function place_config {
+    CN=$1
+    echo "Configuring $1..."
+    rm -rf ~/.config/$CN
+    ln -s $REPOPATH/configs/$CN ~/.config/$CN
+    echo "$1 configured"
+
+}
+
 
 function install_gui {
     install_packages "${wm_packges[@]}"
-    echo "[ 1 ] - Hyprland"
+    echo "[ 1 ] - Hyprland / Sway"
     echo "[ 2 ] - i3"
 
     read -p "choose wm: " opt
@@ -48,29 +57,20 @@ function install_gui {
             # Install packages
             install_packages "${wayland_packages[@]}"
 
-            # Delete existing config dirs (maybe defaults)
-            rm -rf ~/.config/hypr
-            rm -rf ~/.config/waybar
-            rm -rf ~/.config/sway
+            place_config hypr
+            place_config waybar
+            place_config sway
 
-            # Link configs to config dir
-            ln -s $REPOPATH/configs/hyprland ~/.config/hypr
-            ln -s $REPOPATH/configs/waybar ~/.config/waybar
-            ln -s $REPOPATH/configs/sway ~/.config/sway
-            echo "Linked waybar, hyprland and sway config"
+            echo "Configs for waybar, hyprland and sway placed"
             ;;
         2)
             # Install necessary packages for i3
             install_packages "${x11_packages[@]}"
 
-            # Delete existing config dirs (maybe defaults)
-            rm -rf ~/.config/i3
-            rm -rf ~/.config/picom
+            place_config i3
+            place_config picom
 
-            # Link configs to config dir
-            ln -s $REPOPATH/configs/i3 ~/.config/i3
-            ln -s $REPOPATH/configs/picom ~/.config/picom
-            echo "Linked i3 and picom configs"
+            echo "Configs for i3 and picom placed"
             ;;
         *)
             echo "unknown option"
@@ -115,7 +115,7 @@ function configure_packages {
     read -p "Install gui? (y/n): " opt
     if [[ $opt == "y" ]] || [[ $opt == "Y" ]]; then
         install_gui
-        gui_installed=true
+        GUIBOOL=true
     else
         echo "You chose no"
     fi
@@ -123,39 +123,6 @@ function configure_packages {
 
 function configure_git {
     cp configs/gitconfig ~/.gitconfig
-}
-
-# Note: "configure_vim" was removed because I use nvim, vimrc is still in this repo
-function configure_nvim {
-    # Delete config dir if existing (maybe defaults)
-    rm -rf ~/.config/nvim
-
-    # Link configs to config dir
-    ln -s $REPOPATH/configs/neovim ~/.config/nvim
-}
-
-function configure_alacritty {
-    # Delete config dir if existing (maybe defaults)
-    rm -rf ~/.config/alacritty
-
-    # Link configs to config dir
-    ln -s $REPOPATH/configs/alacritty ~/.config/alacritty
-}
-
-function configure_dunst {
-    # Delete config dir if existing (maybe defaults)
-    rm -rf ~/.config/dunst
-
-    # Link configs to config dir
-    ln -s $REPOPATH/configs/dunst ~/.config/dunst
-}
-
-function configure_conky {
-    # Delete config dir if existing (maybe defaults)
-    rm -rf ~/.config/conky
-
-    # Link configs to config dir
-    ln -s $REPOPATH/configs/conky ~/.config/conky
 }
 
 function configure_wallpapers {
@@ -173,15 +140,11 @@ if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
     configure_packages
     configure_git
     cp configs/bashrc ~/.bashrc
-    if [[ $gui_installed = true ]]; then
-        echo "Configuring alacritty..."
-        configure_alacritty
-        echo "Configured alacritty"
-        echo "Configuring neovim..."
-        configure_nvim
-        echo "Configured neovim"
-        configure_conky
-        configure_dunst
+    if [[ $GUIBOOL = true ]]; then
+        place_config alacritty
+        place_config nvim
+        place_config conky
+        place_config dunst
         configure_wallpapers
     else
         echo "No gui installed so no extra configs necessary"
