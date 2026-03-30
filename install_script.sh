@@ -123,18 +123,19 @@ function configure_nvim {
 }
 
 function configure_alacritty {
-    mkdir -p ~/.config/alacritty
     cp configs/alacritty.toml ~/.config/alacritty.toml
 }
 
 function configure_dunst {
-    mkdir -p ~/.config/dunst
-    cp configs/dunstrc ~/.config/dunst/dunstrc
+    cp -r configs/dunst ~/.config/
 }
 
 function configure_conky {
-    mkdir -p ~/.config/conky
-    cp configs/conky/conky.conf ~/.config/conky/conky.conf
+    cp -r configs/conky ~/.config/
+}
+
+function configure_wallpapers {
+    cp -r wallpapers ~/.local/share/
 }
 
 
@@ -157,6 +158,7 @@ if [[ "$linux_os_family" == "arch" ]] || [[ "$linux_os" == "arch" ]]; then
         echo "Configured neovim"
         configure_conky
         configure_dunst
+        configure_wallpapers
     else
         echo "No gui installed so no extra configs necessary"
     fi

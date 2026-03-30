@@ -42,7 +42,7 @@ workspace $ws3 output DP-1
 workspace $ws6 output DP-1
 
 exec nm-applet
-exec swaybg -i ~/.config/hypr/wallpapers/a_street_with_buildings_and_signs-1.png
+exec swaybg -i ~/.local/share/wallpapers/a_street_with_buildings_and_signs-1.png
 exec waybar
 input "type:keyboard" {
     xkb_layout de
