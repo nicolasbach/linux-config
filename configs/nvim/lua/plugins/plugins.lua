@@ -1,52 +1,58 @@
 
------------------------------
---- Plugin Configurations ---
------------------------------
--- Bufferline --
-require("bufferline").setup{
-    options = {
-        diagnostics = "nvim_lsp",
-        hover = {
-            enabled = false
-        },
-        indicator = {
-            style = "underline"
-        },
-        numbers = "ordinal",
-        separator_style = "thick",
-        show_buffer_close_icons = false,
-        show_close_icons = false,
+vim.pack.add({
+    {
+        src = "https://github.com/windwp/nvim-autopairs"
+    },
+    {
+        src = "https://github.com/nvim-tree/nvim-tree.lua"
+    },
+    {
+        src = "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    {
+        src = "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    {
+        src = "https://github.com/nvim-lua/plenary.nvim"
+    },
+    {
+        src = "https://github.com/nvim-telescope/telescope.nvim"
+    },
+    {
+        src = "https://github.com/akinsho/bufferline.nvim"
+    },
+    {
+        src = "https://github.com/nvim-lualine/lualine.nvim"
+    },
+    {
+        src = "https://github.com/kylechui/nvim-surround"
+    },
+    {
+        src = "https://github.com/neovim/nvim-lspconfig"
+    },
+    {
+        src = "https://github.com/hrsh7th/cmp-nvim-lsp"
+    },
+    {
+        src = "https://github.com/hrsh7th/cmp-buffer"
+    },
+    {
+        src = "https://github.com/hrsh7th/cmp-path"
+    },
+    {
+        src = "https://github.com/hrsh7th/cmp-cmdline"
+    },
+    {
+        src = "https://github.com/hrsh7th/nvim-cmp"
+    },
+    {
+        src = "https://github.com/rafamadriz/friendly-snippets"
+    },
+    {
+        src = "https://github.com/L3MON4D3/LuaSnip"
+    },
+    {
+        src = "https://github.com/saadparwaiz1/cmp_luasnip"
     }
-}
-
--- Lualine --
-require('lualine').setup {
-    options = { theme = 'codedark' },
-    sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'diagnostics'},
-        lualine_c = {'filename'},
-        lualine_x = {'encoding', 'filesize', 'fileformat', 'filetype'},
-        lualine_y = {'lsp_status'},
-        lualine_z = {'progress', 'location'}
-    }
-}
-
--- Snippets --
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip").filetype_extend("python", { "pydoc" })
-
--- NVIM Tree --
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-require("nvim-tree").setup({
-    sort = {
-        sorter = "case_sensitive",
-    },
-    view = {
-        width = 30,
-    },
-    filters = {
-        dotfiles = false,
-    },
+    
 })
